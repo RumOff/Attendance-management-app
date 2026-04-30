@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 
-Route::middleware(['auth', 'verified'])->group(function (){
+// Route::middleware(['auth', 'verified'])->group(function (){
     
     // ******** 一般ユーザー ********
     //  勤怠登録
@@ -33,7 +33,7 @@ Route::middleware(['auth', 'verified'])->group(function (){
     Route::get('/admin/attendance/staff/{id}', [AdminController::class, 'staffAttendance'])->name('admin.staffAttendance');
 
     // 修正申請承認画面 
-    Route::post('stamp_correction_request/approve/{attendance_correct_request_id}', [AdminController::class, 'approve'])->name('admin.approve');
+    Route::get('stamp_correction_request/approve/{attendance_correct_request_id}', [AdminController::class, 'approve'])->name('admin.approve');
     
     
     
@@ -41,4 +41,4 @@ Route::middleware(['auth', 'verified'])->group(function (){
     // 申請一覧画面 
     Route::get('stamp_correction_request/list', [AdminController::class, 'requests'])->name('requests');
     
-});
+// });

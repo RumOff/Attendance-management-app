@@ -11,7 +11,7 @@
   <form class="form" action="/login" method="post">
     @csrf
     <h1 class="form__title">
-      ログイン
+      管理者ログイン
     </h1>
 
     <div class="form__group">
@@ -39,19 +39,13 @@
           </p>
 
         </div>
-      </div>
     </div>
 
     <div class="form__group">
-      <button class="form__button-submit btn-red" type="submit">ログイン</button>
-    </div>
-    
-    <div class="auth-parent">
-      <a class="auth__button" href="/register">会員登録の方はこちら</a>
+      <button class="form__button-submit btn-red" type="submit">管理者ログインする</button>
     </div>
 
   </form>
   
 </div>
-
 @endsection

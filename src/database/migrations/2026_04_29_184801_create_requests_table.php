@@ -16,11 +16,13 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
-            $table->foreignId('attendance_id')->constrained()->cascadeOnDelete();
-            $table->date('applicable_date');
+            $table->foreignId('attendance_id')->constrained('attendance_records')->cascadeOnDelete();
+
+            $table->date('applicamle_date');
+            
             $table->text('reason');
-            $table->date('request_date');
-            $table->integer('status');
+ 
+            $table->foreignId('status_id');
             $table->timestamps();
         });
     }

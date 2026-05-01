@@ -17,9 +17,10 @@ class CreateAttendanceRecordsTable extends Migration
             $table->id();
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->date('date');
-            $table->time('clock_in');
-            $table->time('clock_out');
-            $table->text('remarks');
+            $table->dateTime('clock_in')->nullable();
+            $table->dateTime('clock_out')->nullable();
+            $table->text('remarks')->nullable();
+            $table->unique(['user_id', 'date']);
             $table->timestamps();
         });
     }

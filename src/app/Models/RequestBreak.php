@@ -4,9 +4,12 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BreakTime;
+use App\Models\AttendanceRequest;
 
 class RequestBreak extends Model
 {
+
     use HasFactory;
 
     protected $fillable = [
@@ -16,10 +19,10 @@ class RequestBreak extends Model
         'new_break_start',
         'old_break_end',
         'new_break_end',
-    ]
+    ];
 
     public function request(){
-        return $this->belongsTo(Request::class);
+        return $this->belongsTo(AttendanceRequest::class);
     }
 
     public function break()

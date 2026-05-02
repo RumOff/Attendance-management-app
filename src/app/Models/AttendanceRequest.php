@@ -5,7 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 
-class Request extends Model
+class AttendanceRequest extends Model
 {
     use HasFactory;
 
@@ -15,10 +15,10 @@ class Request extends Model
         'applicable_date',
         'reason',
         'status',
-    ]
+    ];
 
     public function attendance(){
-        return $this->belongsTo(AttendanceRecord::class, 'attendance-id');
+        return $this->belongsTo(AttendanceRecord::class, 'attendance_id');
     }
 
     public function attendanceFix(){
@@ -26,6 +26,6 @@ class Request extends Model
     }
 
     public function breakFix(){
-        return $this->hasMany(RequestBreake::class);
+        return $this->hasMany(RequestBreak::class);
     }
 }

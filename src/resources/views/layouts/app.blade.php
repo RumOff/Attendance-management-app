@@ -38,12 +38,10 @@
               </li>
           @endauth
 
-          <li class="header__item">
-            <a href="{{ route('mypage.index') }}" class="header__link">マイページ</a>
-          </li>
-          <li class="header__item">
-            <a href="/sell" class="header__link header__link--sell">出品</a>
-          </li>
+
+          {{-- <li class="header__item">
+            <a href="/sell" class="header__link header__link--sell"></a>
+          </li> --}}
 
         </ul>
       </nav>

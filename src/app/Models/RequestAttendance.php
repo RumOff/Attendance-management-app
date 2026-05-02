@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\Request;
 
 class RequestAttendance extends Model
 {
@@ -15,9 +16,9 @@ class RequestAttendance extends Model
         'new_clock_in',
         'old_clock_out',
         'new_clock_out',
-    ]
+    ];
 
     public function request(){
-        return $this->belongsTo(Request::class);
+        return $this->belongsTo(AttendanceRequest::class);
     }
 }

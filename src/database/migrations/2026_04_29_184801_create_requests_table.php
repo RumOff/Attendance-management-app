@@ -18,7 +18,7 @@ class CreateRequestsTable extends Migration
             $table->foreignId('user_id')->constrained()->cascadeOnDelete();
             $table->foreignId('attendance_id')->constrained('attendance_records')->cascadeOnDelete();
 
-            $table->date('applicamle_date');
+            $table->date('applicable_date');
             
             $table->text('reason');
  

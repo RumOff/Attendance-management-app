@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
+use App\Models\BreakTime;
+use App\Models\AttendanceRequest;
 
 class AttendanceRecord extends Model
 {
@@ -18,10 +20,10 @@ class AttendanceRecord extends Model
     ];
 
     public function breaks(){
-        return $this->hasMany(Break::class, 'attendance_id');
+        return $this->hasMany(BreakTime::class, 'attendance_id');
     }
 
     public function requests(){
-        return $this->hasMany(Request::class);
+        return $this->hasMany(AttendanceRequest::class);
     }
 }

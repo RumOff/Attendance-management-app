@@ -21,46 +21,50 @@
 
     <tbody class="history__table--tbody">
         @foreach ($dates as $date)
-                        @php
-                $key = $date->format('Y-m-d');
-                $attendance = $attendances[$key] ?? null;
-                        @endphp
-            {{ dd($attendance->breaks) }}
-                        <tr class="history__table-row">
+                    @php
+            $key = $date->format('Y-m-d');
+            $attendance = $attendances[$key] ?? null;
+                    @endphp
 
-                            <td class="history__table--data">
-                                {{ $date->format('m/d') }}
-                            </td>
+                    <tr class="history__table-row">
 
-                            <td class="history__table--data">
-                                {{ $attendance->clock_in ?? null }}
-                            </td>
+                        <td class="history__table--data">
+                            {{ $date->format('m/d') }}
+                        </td>
 
-                            <td class="history__table--data">
-                                {{ $attendance->clock_out ?? null }}
-                            </td>
+                        <td class="history__table--data">
+                            {{ $attendance->clock_in ?? null }}
+                        </td>
 
-                            <td class="history__table--data">
-                                @if ($attendance && $attendance->break_minutes !== null)
-                                    {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                                @else
+                        <td class="history__table--data">
+                            {{ $attendance->clock_out ?? null }}
+                        </td>
 
-                                @endif
-                            </td>
+                        <td class="history__table--data">
+                            @if ($attendance && $attendance->break_minutes !== null)
+                                {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                            @else
 
-                            <td class="history__table--data">
-                                @if ($attendance && $attendance->total_minutes !== null)
-                                    {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                                @else
+                            @endif
+                        </td>
 
-                                @endif
-                            </td>
+                        <td class="history__table--data">
+                            @if ($attendance && $attendance->total_minutes !== null)
+                                {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                            @else
 
-                            <td class="history__table--data">
-                                詳細
-                            </td>
+                            @endif
+                        </td>
 
-                        </tr>
+                        <td class="history__table--data">
+                            @if($attendance && $attendance->id !== null)
+                                <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
+                            @else
+                                <p class="history__detail">詳細</p>
+                            @endif
+                        </td>
+
+                    </tr>
 
         @endforeach
     </tbody>

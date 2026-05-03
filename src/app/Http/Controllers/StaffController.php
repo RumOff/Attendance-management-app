@@ -15,7 +15,7 @@ class StaffController extends Controller
         $attendance = AttendanceRecord::where('user_id', auth()->id())
         ->where('date', now()->toDateString())
         ->first();
-
+       
         $status = '勤務外';
 
         if ($attendance) {
@@ -129,8 +129,12 @@ class StaffController extends Controller
         return view('staff.history', compact('dates', 'attendances', 'currentMonth'));
     }
 
-    public function show(){
+    public function show($attendance_id){
 
-        return view('staff.show');
+        $attendance = AttendanceRecord::where('id', $attendance_id)
+            ->with('breaks')
+            ->get();
+
+        return view('staff.show', compact('attendance'));
     }
 }

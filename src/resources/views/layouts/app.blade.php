@@ -34,14 +34,16 @@
             </li>
           @else
               <li class="header__item">
-                <a href="{{ route('login') }}" class="header__link">ログイン</a>
+                <a href="{{ route('login') }}" class="header__nav">ログイン</a>
               </li>
           @endauth
 
 
-          {{-- <li class="header__item">
-            <a href="/sell" class="header__link header__link--sell"></a>
-          </li> --}}
+          <li class="header__item">
+            <a href="/attendance" class="header__nav">勤怠</a>
+            <a href="/attendance/list" class="header__nav">勤怠一覧</a>
+            <a href="/stamp_correction_request/list" class="header__nav">申請</a>
+          </li>
 
         </ul>
       </nav>

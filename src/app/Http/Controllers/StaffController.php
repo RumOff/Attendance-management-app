@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use App\Models\AttendanceRecord;
 use App\Models\BreakTime;
 use Illuminate\Http\Request;
+use Carbon\Carbon;
+use Carbon\CarbonPeriod;
 
 class StaffController extends Controller
 {
@@ -28,7 +30,6 @@ class StaffController extends Controller
             } else {
                 $status = '出勤中';
             }
-
         }
 
         return view('staff.index', compact('attendance', 'status'));
@@ -103,13 +104,33 @@ class StaffController extends Controller
 
     }
 
+    public function history(Request $request){
+        $month = $request->input('month');
+        $currentMonth = $month
+            ? Carbon::createFromFormat('Y-m', $month)
+            : Carbon::now();
+
+        // 該当月のはじめと終わりの日にち取得(copy()で$currentMonthを書き換えない)
+        $start = $currentMonth->copy()->startOfMonth();
+        $end = $currentMonth->copy()->endOfMonth();
+
+        // 日付のリスト
+        $dates = CarbonPeriod::create($start, $end);
+
+        $attendances = AttendanceRecord::where('user_id', auth()->id())
+            ->whereBetween('date', [$start, $end])
+            ->with('breaks')
+            ->get()
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+        });
+        // 日付をキーにした配列に変換 ↑
+
+        return view('staff.history', compact('dates', 'attendances', 'currentMonth'));
+    }
+
     public function show(){
 
         return view('staff.show');
-    }
-
-    public function history(){
-
-        return view('staff.history');
     }
 }

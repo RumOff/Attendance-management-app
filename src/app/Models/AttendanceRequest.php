@@ -9,20 +9,21 @@ class AttendanceRequest extends Model
 {
     use HasFactory;
 
+    const STATUS_PENDING = 'pending';
+    const STATUS_APPROVED  = 'approved';
+    const STATUS_REJECTED  = 'rejected';
+
     protected $fillable = [
         'user_id',
         'attendance_id',
-        'applicable_date',
-        'reason',
+        'clock_in',
+        'clock_out',
+        'remarks',
         'status',
     ];
 
     public function attendance(){
         return $this->belongsTo(AttendanceRecord::class, 'attendance_id');
-    }
-
-    public function attendanceFix(){
-        return $this->hasOne(RequestAttendance::class);
     }
 
     public function breakFix(){

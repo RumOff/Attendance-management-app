@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\AttendanceRecord;
 use App\Models\BreakTime;
+use App\Models\AttendanceRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
@@ -132,9 +133,25 @@ class StaffController extends Controller
     public function show($attendance_id){
 
         $attendance = AttendanceRecord::where('id', $attendance_id)
-            ->with('breaks')
-            ->get();
+            ->with('breaks', 'user')
+            ->findOrFail($attendance_id);
 
         return view('staff.show', compact('attendance'));
     }
+
+    public function storeRequests(Request $request){
+
+        AttendanceRequest::create([
+            'user_id' => auth()->id(),
+            'attendance_id' => $request->attendance_id,
+            'clock_in' => $request->clock_in,
+            'clock_out' => $request->clock_out,
+            'remarks' => $request->remarks,
+            
+        ]);
+
+        return redirect()->back();
+    }
+
+    
 }

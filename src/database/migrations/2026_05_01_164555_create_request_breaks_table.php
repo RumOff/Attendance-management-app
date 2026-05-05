@@ -15,16 +15,12 @@ class CreateRequestBreaksTable extends Migration
     {
         Schema::create('requests_breaks', function (Blueprint $table) {
             $table->id();
-            $table->foreignId('request_id')->constrained()->cascadeOnDelete();
+            $table->foreignId('attendance_request_id')->constrained()->cascadeOnDelete();
             $table->foreignId('break_id')->constrained('break_times')->cascadeOnDelete();
 
-            // 修正前
-            $table->time('old_break_start')->nullable();
-            $table->time('old_break_end')->nullable();
-
             // 修正後
-            $table->time('new_break_start')->nullable();
-            $table->time('new_break_end')->nullable();
+            $table->time('break_start')->nullable();
+            $table->time('break_end')->nullable();
 
             $table->timestamps();
         });

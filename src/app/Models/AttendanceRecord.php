@@ -6,6 +6,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use App\Models\BreakTime;
 use App\Models\AttendanceRequest;
+use App\Models\User;
 use Carbon\Carbon;
 
 class AttendanceRecord extends Model
@@ -26,6 +27,10 @@ class AttendanceRecord extends Model
 
     public function requests(){
         return $this->hasMany(AttendanceRequest::class);
+    }
+
+    public function user(){
+        return $this->belongsTo(user::class);
     }
 
     public function getTotalMinutesAttribute(){

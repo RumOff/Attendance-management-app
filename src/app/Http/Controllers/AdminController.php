@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\AttendanceRequest;
 use Illuminate\Http\Request;
 
 class AdminController extends Controller
@@ -32,7 +33,10 @@ class AdminController extends Controller
     }
 
     public function requests(){
+        $requests = AttendanceRequest::with('attendance')
+        ->where('user_id', auth()->id())
+        ->get();
 
-    return view('admin.request');
+        return view('admin.request', compact('requests'));
     }
 }

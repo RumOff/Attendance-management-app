@@ -40,7 +40,7 @@ use App\Http\Controllers\StaffController;
 
     // ******** 共通 ********
     // 申請一覧画面
-    Route::get('stamp_correction_request/list', [AdminController::class, 'requests'])->name('requests');
+    Route::get('stamp_correction_request/list', [AdminController::class, 'requests'])->name('admin.requests');
 
     Route::post('stamp_correction_request/list', [StaffController::class, 'storeRequests'])->name('staff.storeRequests');
 

@@ -150,7 +150,7 @@ class StaffController extends Controller
             
         ]);
 
-        return redirect()->back();
+        return redirect()->route('admin.requests');
     }
 
     

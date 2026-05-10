@@ -4,6 +4,8 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 
+Route::get('/admin/login', [AdminController::class, 'showLoginForm']);
+Route::post('/admin/login', [AdminController::class, 'login']);
 
 // Route::middleware(['auth'])->group(function (){
 

@@ -6,46 +6,46 @@
 
 @section('content')
 
-<div class="container">
-  
-  <form class="form" action="/login" method="post">
-    @csrf
-    <h1 class="form__title">
-      管理者ログイン
-    </h1>
+  <div class="container">
 
-    <div class="form__group">
-      <p class="form__label--item">メールアドレス</p>
-        <div class="form__input">
+    <form class="form" action="/admin/login" method="post">
+      @csrf
+      <h1 class="form__title">
+        管理者ログイン
+      </h1>
 
-          <input type="email" name="email" value="{{ old('email') }}"
-          class="form__input--text" />
-          
-          <p class="error">
-            @error('email'){{ $message }}@enderror
-          </p>
-      
-       </div> 
-    </div>
+      <div class="form__group">
+        <p class="form__label--item">メールアドレス</p>
+          <div class="form__input">
 
-    <div class="form__group">
-      <p class="form__label--item">パスワード</p>
-        <div class="form__input">
+            <input type="email" name="email" value="{{ old('email') }}"
+            class="form__input--text" />
 
-          <input type="password" name="password" class="form__input--text" />
+            <p class="error">
+              @error('email'){{ $message }}@enderror
+            </p>
 
-          <p class="error">
-            @error('password'){{ $message }}@enderror
-          </p>
+         </div> 
+      </div>
 
-        </div>
-    </div>
+      <div class="form__group">
+        <p class="form__label--item">パスワード</p>
+          <div class="form__input">
 
-    <div class="form__group">
-      <button class="form__button-submit btn-red" type="submit">管理者ログインする</button>
-    </div>
+            <input type="password" name="password" class="form__input--text" />
 
-  </form>
-  
-</div>
+            <p class="error">
+              @error('password'){{ $message }}@enderror
+            </p>
+
+          </div>
+      </div>
+
+      <div class="form__group">
+        <button class="form__button-submit btn-red" type="submit">管理者ログインする</button>
+      </div>
+
+    </form>
+
+  </div>
 @endsection

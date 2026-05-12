@@ -31,7 +31,7 @@
 
                 {{-- 名前 --}}
                 <td class="request-table__data">
-                    {{ $request->attendance->name }}
+                    {{ $request->attendance->user->name }}
                 </td>
 
                 {{-- 対象日時 --}}

@@ -23,27 +23,28 @@
       {{-- ナビ --}}
       <nav class="header__nav">
         <ul class="header__list {{ request()->is('login') || request()->is('register') ? 'hidden' : '' }}">
-          
-          {{-- ログインの時のみ表示 --}}
-          @auth
-            <li class="header__item">
-              <form action="{{ route('logout') }}" method="post">
-                @csrf
-                <button class="header__button">ログアウト</button>
-              </form>
-            </li>
-          @else
-              <li class="header__item">
-                <a href="{{ route('login') }}" class="header__nav">ログイン</a>
-              </li>
-          @endauth
 
+        {{-- 管理者ログイン中 --}}
+        @auth('admin')
+          <a href="/admin/attendance/list">勤怠一覧</a>
+          <a href="/admin/staff/list">スタッフ一覧</a>
+          <a href="/stamp_correction_request/list" class="header__nav">申請一覧</a>
+          <form action="/admin/logout" method="POST">
+            @csrf
+            <button>ログアウト</button>
+          </form>
+        @endauth
 
-          <li class="header__item">
-            <a href="/attendance" class="header__nav">勤怠</a>
-            <a href="/attendance/list" class="header__nav">勤怠一覧</a>
-            <a href="/stamp_correction_request/list" class="header__nav">申請</a>
-          </li>
+        {{-- 一般ユーザーログイン中 --}}
+        @auth('web')
+          <a href="/attendance" class="header__nav">勤怠</a>
+          <a href="/attendance/list" class="header__nav">勤怠一覧</a>
+          <a href="/stamp_correction_request/list" class="header__nav">申請</a>
+          <form action="/logout" method="POST">
+            @csrf
+            <button>ログアウト</button>
+          </form>
+        @endauth
 
         </ul>
       </nav>

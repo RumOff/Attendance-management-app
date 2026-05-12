@@ -29,4 +29,8 @@ class AttendanceRequest extends Model
     public function breakFix(){
         return $this->hasMany(RequestBreak::class);
     }
+
+    public function user(){
+        return $this->belongsTo(User::class);
+    }
 }

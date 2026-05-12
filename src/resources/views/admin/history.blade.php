@@ -1,3 +1,11 @@
+@extends('layouts.app')
+
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/auth/adminlogin.css') }}">
+@endsection
+
+@section('content')
+
 <h1 class="history_title">
     {{ $currentDate }}の勤怠
 </h1>
@@ -67,3 +75,4 @@
     </tbody>
 
 </table>
+@endsection

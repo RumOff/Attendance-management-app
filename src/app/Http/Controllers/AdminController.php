@@ -53,13 +53,36 @@ class AdminController extends Controller
     }
 
     public function staffList(){
+        $staffs = User::get();
 
-        return view('admin.staff');
+        return view('admin.staff', compact('staffs'));
     }
 
-    public function staffAttendance(){
+    public function staffAttendance(Request $request, $id){
+        $user = User::findOrFail($id);
 
-        return view('admin.staff-attendance');
+        $month = $request->input('month');
+        $currentMonth = $month
+            ? Carbon::createFromFormat('Y-m', $month)
+            : Carbon::now();
+
+        // 該当月のはじめと終わりの日にち取得(copy()で$currentMonthを書き換えない)
+        $start = $currentMonth->copy()->startOfMonth();
+        $end = $currentMonth->copy()->endOfMonth();
+
+        // 日付のリスト
+        $dates = CarbonPeriod::create($start, $end);
+
+        $attendances = AttendanceRecord::where('user_id', $id)
+            ->whereBetween('date', [$start, $end])
+            ->with('breaks')
+            ->get()
+            ->keyBy(function ($item) {
+                return Carbon::parse($item->date)->format('Y-m-d');
+        });
+        // 日付をキーにした配列に変換 ↑
+
+        return view('admin.staff-attendance', compact('user', 'dates', 'attendances', 'currentMonth'));
     }
 
     public function approve(){
@@ -70,6 +93,7 @@ class AdminController extends Controller
     public function requests(){
         $requests = AttendanceRequest::with('attendance')
         ->where('user_id', auth()->id())
+        ->with('user')
         ->get();
 
         return view('admin.request', compact('requests'));

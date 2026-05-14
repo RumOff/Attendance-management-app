@@ -26,23 +26,23 @@
 
         {{-- 管理者ログイン中 --}}
         @auth('admin')
-          <a href="/admin/attendance/list">勤怠一覧</a>
-          <a href="/admin/staff/list">スタッフ一覧</a>
-          <a href="/stamp_correction_request/list" class="header__nav">申請一覧</a>
+          <a href="/admin/attendance/list" class="header__link" >勤怠一覧</a>
+          <a href="/admin/staff/list" class="header__link" >スタッフ一覧</a>
+          <a href="/stamp_correction_request/list" class="header__link">申請一覧</a>
           <form action="/admin/logout" method="POST">
             @csrf
-            <button>ログアウト</button>
+            <button class="header__button">ログアウト</button>
           </form>
         @endauth
 
         {{-- 一般ユーザーログイン中 --}}
         @auth('web')
-          <a href="/attendance" class="header__nav">勤怠</a>
-          <a href="/attendance/list" class="header__nav">勤怠一覧</a>
-          <a href="/stamp_correction_request/list" class="header__nav">申請</a>
+          <a href="/attendance" class="header__link">勤怠</a>
+          <a href="/attendance/list" class="header__link">勤怠一覧</a>
+          <a href="/stamp_correction_request/list" class="header__link">申請</a>
           <form action="/logout" method="POST">
             @csrf
-            <button>ログアウト</button>
+            <button class="header__button">ログアウト</button>
           </form>
         @endauth
 

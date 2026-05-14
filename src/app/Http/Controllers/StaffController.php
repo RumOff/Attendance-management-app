@@ -25,7 +25,7 @@ class StaffController extends Controller
                 ->first();
 
             if ($attendance->clock_out) {
-                $status = '退勤済み';
+                $status = '退勤済';
             } elseif ($breakTime) {
                 $status = '休憩中';
             } else {

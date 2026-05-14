@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 @section('css')
-  <link rel="stylesheet" href="{{ asset('css/auth/adminlogin.css') }}">
+  <link rel="stylesheet" href="{{ asset('css/auth/login.css') }}">
 @endsection
 
 @section('content')
@@ -42,7 +42,7 @@
       </div>
 
       <div class="form__group">
-        <button class="form__button-submit btn-red" type="submit">管理者ログインする</button>
+        <button class="form__button-submit btn-black" type="submit">管理者ログインする</button>
       </div>
 
     </form>

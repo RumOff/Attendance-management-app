@@ -1,67 +1,87 @@
-申請一覧画面
+@extends('layouts.app')
 
-<table class="request-table">
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/request.css') }}">
+@endsection
 
-    <thead class="request-table__head">
-        <tr class="request-table__row">
-            <th class="request-table__header">状態</th>
-            <th class="request-table__header">名前</th>
-            <th class="request-table__header">対象日時</th>
-            <th class="request-table__header">申請理由</th>
-            <th class="request-table__header">申請日時</th>
-            <th class="request-table__header">詳細</th>
-        </tr>
-    </thead>
+@section('content')
+    <div class="container">
+        <div class="content">
+            <h1 class="page__title">
+                申請一覧
+            </h1>
 
-    <tbody class="request-table__body">
-
-        @foreach ($requests as $request)
-
-            <tr class="request-table__row">
-
-                {{-- 状態 --}}
-                <td class="request-table__data">
-                    @if ($request->status === 'pending')
-                        承認待ち
-                    @elseif ($request->status === 'approved')
-                        承認済み
-                    @endif
-                </td>
+            {{-- タブ --}}
+            <div class="attendance-tab">
+                <a href="{{ route('admin.requests') }}" class="attendance-tab__link">承認待ち</a>
+                <a href="{{ route('admin.requests') }}" class="attendance-tab__link">承認済み</a>
+            </div>
 
 
-                {{-- 名前 --}}
-                <td class="request-table__data">
-                    {{ $request->attendance->user->name }}
-                </td>
+            {{-- テーブル --}}
+            <table class="attendance-table">
 
-                {{-- 対象日時 --}}
-                <td class="request-table__data">
-                    {{ $request->attendance->date }}
-                </td>
+                <thead>
+                    <tr>
+                        <th>状態</th>
+                        <th>名前</th>
+                        <th>対象日時</th>
+                        <th>申請理由</th>
+                        <th>申請日時</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
 
-                {{-- 申請理由 --}}
-                <td class="request-table__data">
-                    {{ $request->remarks }}
-                </td>
+                <tbody>
+                    @foreach ($requests as $request)
+                        <tr>
 
-                {{-- 申請日時 --}}
-                <td class="request-table__data">
-                    {{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}
-                </td>
+                            {{-- 状態 --}}
+                            <td>
+                                @if ($request->status === 'pending')
+                                    承認待ち
+                                @elseif ($request->status === 'approved')
+                                    承認済み
+                                @endif
+                            </td>
 
-                {{-- 詳細 --}}
-                <td class="request-table__data">
-                    @if($request->attendance->id && $request->attendance->id !== null)
-                        <a href="/attendance/detail/{{ $request->attendance->id }}" class="history__detail">詳細</a>
-                    @else
-                        <p class="history__detail">詳細</p>
-                    @endif
-                </td>
+                            {{-- 名前 --}}
+                            <td>
+                                {{ $request->attendance->user->name }}
+                            </td>
 
-            </tr>
+                            {{-- 対象日時 --}}
+                            <td>
+                                {{ \Carbon\Carbon::parse($request->attendance->date)->format('Y/m/d') }}
+                            </td>
 
-        @endforeach
+                            {{-- 申請理由 --}}
+                            <td>
+                                {{ $request->remarks }}
+                            </td>
 
-    </tbody>
+                            {{-- 申請日時 --}}
+                            <td>
+                                {{ \Carbon\Carbon::parse($request->created_at)->format('Y/m/d') }}
+                            </td>
 
-</table>
+                            {{-- 詳細 --}}
+                            <td>
+                                @if($request->attendance->id && $request->attendance->id !== null)
+                                    <a href="/attendance/detail/{{ $request->attendance->id }}" class="history__detail">詳細</a>
+                                @else
+                                    <p class="history__detail">詳細</p>
+                                @endif
+                            </td>
+
+                        </tr>
+
+                    @endforeach
+
+                </tbody>
+
+            </table>
+        </div>
+    </div>
+@endsection

@@ -1,30 +1,69 @@
-勤怠詳細
+@extends('layouts.app')
 
-<p>名前</p>
-<p>{{ $attendance->user->name }}</p>
+@section('css')
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/staff/show.css') }}">
+@endsection
 
-<p>日付</p>
-<p>{{ $attendance->date }}</p>
-<p></p>
+@section('content')
+    <div class="container">
+        <div class="content">
+            <h1 class="page__title">
+                勤怠詳細
+            </h1>
 
-<form action="{{ route('staff.storeRequests') }}" method="POST">
-    @csrf
-    <p>出勤・退勤</p>
-    <input type="time" name="clock_in" value="{{ $attendance->clock_in ?? '-' }}">
-    <input type="time" name="clock_out" value="{{ $attendance->clock_out ?? '-' }}">
+            <form action="{{ route('staff.storeRequests') }}" method="POST">
+            @csrf
 
-    <p>休憩</p>
-    <input type="time" name="break_start" value="{{ $attendance->break_start ?? '-' }}">
-    <input type="time" name="break_end" value="{{ $attendance->break_end ?? '-' }}">
+                <table class="attendance-table">
 
-    <p>休憩2</p>
+                    <tr>
+                        <th class="attendance-table__show--th">名前</th>
+                        <td class="attendance-table__show--td">{{ $attendance->user->name }}</td>
+                    </tr>
 
+                    <tr>
+                        <th class="attendance-table__show--th">日付</th>
+                        <td class="attendance-table__show--td">{{ $attendance->date }}</td>
+                    </tr>
 
-    <p>備考</p>
-    <input type="text" name="remarks" value="">
+                    <tr>
+                        <th class="attendance-table__show--th">出勤・退勤</th>
+                        <td class="attendance-table__show--td">
+                            <div class="time-range">
+                                <input type="time" name="clock_in" value="{{ $attendance->clock_in ?? '-' }}">
+                                <p>～</p>
+                                <input type="time" name="clock_out" value="{{ $attendance->clock_out ?? '-' }}">
+                            </div>
+                        </td>
+                    </tr>
 
-    <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
+                    <tr>
+                        <th class="attendance-table__show--th">休憩</th>
+                        <td class="attendance-table__show--td">
+                            <div class="time-range">
+                                <input type="time" name="break_start" value="{{ $attendance->break_start ?? '-' }}">
+                                <p>～</p>
+                                <input type="time" name="break_end" value="{{ $attendance->break_end ?? '-' }}">
+                            </div>
+                        </td>
+                    </tr>
 
-    <button type="submit">修正</button>
+                    <tr>
+                        <th class="attendance-table__show--th">備考</th>
+                        <td class="attendance-table__show--td">
+                            <input type="text" name="remarks" value="">
 
-</form>
+                            <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="button-area">
+                    <button type="submit" class="btn-black btn-submit">修正</button>
+                </div>
+
+            </form>
+        </div>
+    </div>
+@endsection

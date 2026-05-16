@@ -1,0 +1,39 @@
+.attendance-table {
+    width: 100%;
+}
+
+.attendance-table .attendance-table__show--th,
+.attendance-table .attendance-table__show--td {
+    text-align: left;
+    border-bottom: 1px solid #ddd;
+    padding: 17px;
+}
+
+.attendance-table__show--td input {
+    width: 80px;
+}
+
+.attendance-table .attendance-table__show--th {
+    width: 30%;
+    padding: 17px 10px;
+}
+
+.time-range {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+}
+
+.time-range p {
+    margin: 0;
+}
+
+.button-area {
+    text-align: right;
+}
+
+.btn-submit {
+    width: 80px;
+    padding: 3px 0;
+    align-items: end;
+}

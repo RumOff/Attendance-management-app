@@ -12,7 +12,7 @@
                 勤怠詳細
             </h1>
 
-            <form action="{{ route('staff.storeRequests') }}" method="POST">
+            <form action="{{ route('requests.storeRequests') }}" method="POST">
             @csrf
 
                 <table class="attendance-table attendance-table__show">

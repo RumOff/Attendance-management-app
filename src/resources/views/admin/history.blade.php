@@ -79,7 +79,7 @@
                             {{-- 詳細 --}}
                             <td class="history__table--data">
                                 @if($attendance && $attendance->id !== null)
-                                    <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
+                                    <a href="{{ route('admin.show', $attendance->id) }}" class="history__detail">詳細</a>
                                 @else
                                     <p class="history__detail">詳細</p>
                                 @endif

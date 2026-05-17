@@ -14,8 +14,8 @@
 
             {{-- タブ --}}
             <div class="attendance-tab">
-                <a href="{{ route('admin.requests') }}" class="attendance-tab__link">承認待ち</a>
-                <a href="{{ route('admin.requests') }}" class="attendance-tab__link">承認済み</a>
+                <a href="{{ route('requests.index') }}" class="attendance-tab__link">承認待ち</a>
+                <a href="{{ route('requests.index') }}" class="attendance-tab__link">承認済み</a>
             </div>
 
 

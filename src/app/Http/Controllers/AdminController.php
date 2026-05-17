@@ -14,11 +14,12 @@ use Carbon\CarbonPeriod;
 class AdminController extends Controller
 {
     public function showLoginForm(){
-
-    return view('auth.admin-login');
+        return view('auth.admin-login');
     }
 
     public function login(Request $request){
+    
+        Auth::guard('web')->logout();
 
         $credentials = $request->only('email', 'password');
 
@@ -34,6 +35,13 @@ class AdminController extends Controller
         ]);
     }
 
+    public function logout(Request $request){
+    
+        Auth::guard('admin')->logout();
+
+        return redirect('/admin/login');
+    }
+
     public function history(Request $request){
         $date = $request->input('date');
         $currentDate = $date
@@ -47,9 +55,10 @@ class AdminController extends Controller
         return view('admin.history', compact('attendances', 'currentDate'));
     }
 
-    public function show(){
+    public function show($id){
+        $attendance = AttendanceRecord::findOrFail($id);
 
-        return view('admin.show');
+        return view('admin.show', compact('attendance'));
     }
 
     public function staffList(){
@@ -83,19 +92,5 @@ class AdminController extends Controller
         // 日付をキーにした配列に変換 ↑
 
         return view('admin.staff-attendance', compact('user', 'dates', 'attendances', 'currentMonth'));
-    }
-
-    public function approve(){
-
-        return view('admin.approval');
-    }
-
-    public function requests(){
-        $requests = AttendanceRequest::with('attendance')
-        ->where('user_id', auth()->id())
-        ->with('user')
-        ->get();
-
-        return view('admin.request', compact('requests'));
     }
 }

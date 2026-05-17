@@ -6,40 +6,44 @@
 
 @section('content')
 
-    <h1 class="staff_title">
-        スタッフ一覧
-    </h1>
+    <div class="container">
+        <div class="content">
+            <h1 class="page__title">
+                スタッフ一覧
+            </h1>
 
-    <table class="staff__table">
-        <thead class="staff__table--thead">
-            <tr class="staff__table--header-row">
-                <th class="staff__table--header">名前</th>
-                <th class="staff__table--header">メールアドレス</th>
-                <th class="staff__table--header">月次勤怠</th>
-            </tr>
-        </thead>
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>名前</th>
+                        <th>メールアドレス</th>
+                        <th>月次勤怠</th>
+                    </tr>
+                </thead>
 
-        <tbody class="staff__table--tbody">
-            @foreach ($staffs as $staff)
+                <tbody>
+                    @foreach ($staffs as $staff)
 
-                <tr class="staff__table-row">
+                        <tr>
 
-                    <td class="staff__table--data">
-                        {{ $staff->name }}
-                    </td>
+                            <td>
+                                {{ $staff->name }}
+                            </td>
 
-                    <td class="staff__table--data">
-                        {{ $staff->email }}
-                    </td>
+                            <td>
+                                {{ $staff->email }}
+                            </td>
 
-                    <td class="staff__table--data">
-                        <a href="/admin/attendance/staff/{{ $staff->id }}" class="staff__detail">詳細</a>
-                    </td>
+                            <td>
+                                <a href="/admin/attendance/staff/{{ $staff->id }}" class="history__detail">詳細</a>
+                            </td>
 
-                </tr>
+                        </tr>
 
-            @endforeach
-        </tbody>
+                    @endforeach
+                </tbody>
 
-    </table>
+            </table>
+        </div>
+    </div>
 @endsection

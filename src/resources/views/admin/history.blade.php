@@ -1,78 +1,96 @@
 @extends('layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/auth/adminlogin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/common.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/history.css') }}">
 @endsection
 
 @section('content')
 
-<h1 class="history_title">
-    {{ $currentDate }}の勤怠
-</h1>
+    <div class="container">
+        <div class="content">
+            <h1 class="page__title">
+                {{ $currentDate->format('Y年n月j日') }}の勤怠
+            </h1>
 
-<input type="month" name="month" value="{{ $currentDate->format('Y-m') }}">
+            {{-- カレンダー --}}
+            <div class="month-nav">
+                <a href="{{ route('admin.history') }}" class="month-nav__link"><span>←</span> 前日</a>
 
-<p class="history_date">
+                <div class="month-nav__display">
+                    <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
+                    <span>{{ $currentDate->format('Y/m/d') }}</span>
+                </div>
 
-</p>
+                <a href="{{ route('admin.history') }}" class="month-nav__link">翌日 <span>→</span></a>
+            </div>
 
-<table class="history__table">
-    <thead class="history__table--thead">
-        <tr class="history__table--header-row">
-            <th class="history__table--header">名前</th>
-            <th class="history__table--header">出勤</th>
-            <th class="history__table--header">退勤</th>
-            <th class="history__table--header">休憩</th>
-            <th class="history__table--header">合計</th>
-            <th class="history__table--header">詳細</th>
-        </tr>
-    </thead>
+            {{-- テーブル --}}
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>名前</th>
+                        <th>出勤</th>
+                        <th>退勤</th>
+                        <th>休憩</th>
+                        <th>合計</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
 
-    <tbody class="history__table--tbody">
-        @foreach ($attendances as $attendance)
+                <tbody>
+                    @foreach ($attendances as $attendance)
 
-            <tr class="history__table-row">
+                        <tr class="history__table-row">
 
-                <td class="history__table--data">
-                    {{ $attendance->user->name }}
-                </td>
+                            {{-- 名前 --}}
+                            <td class="history__table--data">
+                                {{ $attendance->user->name }}
+                            </td>
 
-                <td class="history__table--data">
-                    {{ $attendance->clock_in ?? null }}
-                </td>
+                            {{-- 出勤 --}}
+                            <td class="history__table--data">
+                                {{ $attendance->clock_in->format('H:i') ?? null }}
+                            </td>
 
-                <td class="history__table--data">
-                    {{ $attendance->clock_out ?? null }}
-                </td>
+                            {{-- 退勤 --}}
+                            <td class="history__table--data">
+                                {{ $attendance->clock_out->format('H:i') ?? null }}
+                            </td>
 
-                <td class="history__table--data">
-                    @if ($attendance && $attendance->break_minutes !== null)
-                        {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                    @else
+                            {{-- 休憩 --}}
+                            <td class="history__table--data">
+                                @if ($attendance && $attendance->break_minutes !== null)
+                                    {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                @else
 
-                    @endif
-                </td>
+                                @endif
+                            </td>
 
-                <td class="history__table--data">
-                    @if ($attendance && $attendance->total_minutes !== null)
-                        {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                    @else
+                            {{-- 合計 --}}
+                            <td class="history__table--data">
+                                @if ($attendance && $attendance->total_minutes !== null)
+                                    {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                @else
 
-                    @endif
-                </td>
+                                @endif
+                            </td>
 
-                <td class="history__table--data">
-                    @if($attendance && $attendance->id !== null)
-                        <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
-                    @else
-                        <p class="history__detail">詳細</p>
-                    @endif
-                </td>
+                            {{-- 詳細 --}}
+                            <td class="history__table--data">
+                                @if($attendance && $attendance->id !== null)
+                                    <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
+                                @else
+                                    <p class="history__detail">詳細</p>
+                                @endif
+                            </td>
 
-            </tr>
+                        </tr>
 
-        @endforeach
-    </tbody>
+                    @endforeach
+                </tbody>
 
-</table>
+            </table>
+        </div>
+    </div>
 @endsection

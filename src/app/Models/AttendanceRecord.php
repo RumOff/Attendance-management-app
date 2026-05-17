@@ -22,6 +22,7 @@ class AttendanceRecord extends Model
     ];
 
     protected $casts = [
+        'date' => 'date',
         'clock_in' => 'datetime',
         'clock_out' => 'datetime',
     ];

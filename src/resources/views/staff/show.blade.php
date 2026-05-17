@@ -7,7 +7,7 @@
 
 @section('content')
     <div class="container">
-        <div class="content">
+        <div class="content-show">
             <h1 class="page__title">
                 勤怠詳細
             </h1>
@@ -15,16 +15,24 @@
             <form action="{{ route('staff.storeRequests') }}" method="POST">
             @csrf
 
-                <table class="attendance-table">
+                <table class="attendance-table attendance-table__show">
 
                     <tr>
                         <th class="attendance-table__show--th">名前</th>
-                        <td class="attendance-table__show--td">{{ $attendance->user->name }}</td>
+                        <td class="attendance-table__show--td">
+                            {{ $attendance->user->name }}
+                        </td>
                     </tr>
 
                     <tr>
                         <th class="attendance-table__show--th">日付</th>
-                        <td class="attendance-table__show--td">{{ $attendance->date }}</td>
+                        <td class="attendance-table__show--td">
+                            <div class="date-range">
+                                <p>{{ $attendance->date->format('Y年') }}</p>
+                                <p>{{ $attendance->date->format('n月j日') }}</p>
+                            </div>
+                        </td>
+
                     </tr>
 
                     <tr>
@@ -52,13 +60,12 @@
                     <tr>
                         <th class="attendance-table__show--th">備考</th>
                         <td class="attendance-table__show--td">
-                            <input type="text" name="remarks" value="">
+                            <textarea name="remarks" id=""></textarea>
 
                             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                         </td>
                     </tr>
                 </table>
-
                 <div class="button-area">
                     <button type="submit" class="btn-black btn-submit">修正</button>
                 </div>

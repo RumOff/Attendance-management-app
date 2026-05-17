@@ -2,6 +2,10 @@
     width: 100%;
 }
 
+.attendance-table__show {
+    margin-bottom: 25px;
+}
+
 .attendance-table .attendance-table__show--th,
 .attendance-table .attendance-table__show--td {
     text-align: left;
@@ -9,31 +13,25 @@
     padding: 17px;
 }
 
+.attendance-table tr:first-child td {
+    padding-left: 32px;
+}
+
 .attendance-table__show--td input {
     width: 80px;
 }
 
-.attendance-table .attendance-table__show--th {
-    width: 30%;
-    padding: 17px 10px;
-}
-
-.time-range {
-    display: flex;
-    align-items: center;
-    gap: 10px;
-}
-
-.time-range p {
-    margin: 0;
-}
-
-.button-area {
-    text-align: right;
+.attendance-table tr th:first-child {
+    width: 10%;
 }
 
 .btn-submit {
     width: 80px;
     padding: 3px 0;
     align-items: end;
+}
+
+
+.button-area {
+    margin-top: 0;
 }

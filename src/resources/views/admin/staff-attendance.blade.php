@@ -1,80 +1,95 @@
 @extends('layouts.app')
 
 @section('css')
-    <link rel="stylesheet" href="{{ asset('css/auth/adminlogin.css') }}">
+    <link rel="stylesheet" href="{{ asset('css/admin/staff-attendance.css') }}">
 @endsection
 
 @section('content')
 
-    <h1 class="history_title">
-        {{ $user->name }}さんの勤怠
-    </h1>
-    <input type="month" name="month" value="{{ $currentMonth->format('Y-m') }}">
-    <p class="history_date">
+    <div class="container">
+        <div class="content">
+            <h1 class="page__title">
+                {{ $user->name }}さんの勤怠
+            </h1>
 
-    </p>
+            {{-- カレンダー --}}
+            <div class="month-nav">
+                <a href="{{ route('staff.history') }}" class="month-nav__link"><span>←</span> 前月</a>
 
-    <table class="history__table">
-        <thead class="history__table--thead">
-            <tr class="history__table--header-row">
-                <th class="history__table--header">日付</th>
-                <th class="history__table--header">出勤</th>
-                <th class="history__table--header">退勤</th>
-                <th class="history__table--header">休憩</th>
-                <th class="history__table--header">合計</th>
-                <th class="history__table--header">詳細</th>
-            </tr>
-        </thead>
+                <div class="month-nav__display">
+                    <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
+                    <span>{{ $currentMonth->format('Y/m') }}</span>
+                </div>
 
-        <tbody class="history__table--tbody">
-            @foreach ($dates as $date)
-                @php
-                    $key = $date->format('Y-m-d');
-                    $attendance = $attendances[$key] ?? null;
-                @endphp
+                <a href="{{ route('staff.history') }}" class="month-nav__link">翌月 <span>→</span></a>
+            </div>
 
-                <tr class="history__table-row">
+            <table class="attendance-table">
+                <thead>
+                    <tr>
+                        <th>日付</th>
+                        <th>出勤</th>
+                        <th>退勤</th>
+                        <th>休憩</th>
+                        <th>合計</th>
+                        <th>詳細</th>
+                    </tr>
+                </thead>
 
-                    <td class="history__table--data">
-                        {{ $date->format('m/d') }}
-                    </td>
+                <tbody>
+                    @foreach ($dates as $date)
+                        @php
+                            $key = $date->format('Y-m-d');
+                            $attendance = $attendances[$key] ?? null;
+                        @endphp
 
-                    <td class="history__table--data">
-                        {{ $attendance->clock_in ?? null }}
-                    </td>
+                        <tr>
 
-                    <td class="history__table--data">
-                        {{ $attendance->clock_out ?? null }}
-                    </td>
+                            <td>
+                                {{ $date->Isoformat('MM/DD(ddd)') }}
+                            </td>
 
-                    <td class="history__table--data">
-                        @if ($attendance && $attendance->break_minutes !== null)
-                            {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                        @else
+                            <td>
+                                @if ($attendance && $attendance->clock_in)
+                                    {{ $attendance->clock_in->format('H:i') ?? null }}
+                                @endif
+                            </td>
 
-                        @endif
-                    </td>
+                            <td>
+                                @if ($attendance && $attendance->clock_out)
+                                {{ $attendance->clock_out->format('H:i') ?? null }}
+                                @endif
+                            </td>
 
-                    <td class="history__table--data">
-                        @if ($attendance && $attendance->total_minutes !== null)
-                            {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                        @else
+                            <td>
+                                @if ($attendance && $attendance->break_minutes !== null)
+                                    {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                @else
 
-                        @endif
-                    </td>
+                                @endif
+                            </td>
 
-                    <td class="history__table--data">
-                        @if($attendance && $attendance->id !== null)
-                            <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
-                        @else
-                            <p class="history__detail">詳細</p>
-                        @endif
-                    </td>
+                            <td>
+                                @if ($attendance && $attendance->total_minutes !== null)
+                                    {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                @else
 
-                </tr>
+                                @endif
+                            </td>
 
-            @endforeach
-        </tbody>
+                            <td>
+                                @if($attendance && $attendance->id !== null)
+                                    <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
+                                @else
+                                    <p class="history__detail">詳細</p>
+                                @endif
+                            </td>
 
-    </table>
+                        </tr>
+
+                    @endforeach
+                </tbody>
+            </table>
+        </div>
+    </div>
 @endsection

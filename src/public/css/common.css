@@ -64,6 +64,11 @@ body {
     margin: 0 auto;
 }
 
+.content-show {
+    max-width: 650px;
+    margin: 0 auto;
+}
+
 .page__title {
     font-size: 18px;
     border-left: 5px solid black;
@@ -181,10 +186,60 @@ body {
     padding-right: 30px;
 }
 
+
+
 .history__detail {
     margin: 0;
     text-decoration: none;
     color: black;
+}
+
+.date-range {
+    display: flex;
+    align-items: center;
+    gap: 90px;
+}
+
+.date-range p {
+    margin: 0 20px;
+}
+
+.time-range {
+    display: flex;
+    align-items: center;
+    gap: 45px;
+}
+
+.time-range p {
+    margin: 0;
+}
+
+.button-area {
+    text-align: right;
+}
+
+input[type="time"]::-webkit-calendar-picker-indicator {
+    display: none;
+}
+
+input[type="time"] {
+    border: 1px solid #ddd;
+    border-radius: 3px;
+
+    padding: 0 10px;
+
+    font-size: 16px;
+}
+
+textarea {
+    display: block;
+    min-width: 264px;
+    min-height: 60px;
+    padding: 10px 12px;
+    border: 1px solid #ddd;
+    border-radius: 3px;
+    font-size: 12px;
+    resize: none;
 }
 
 /* タブ */

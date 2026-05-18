@@ -1,4 +1,4 @@
-@extends('layouts.app')
+ @extends('layouts.app')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
@@ -39,20 +39,34 @@
                         <th class="attendance-table__show--th">出勤・退勤</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <input type="time" name="clock_in" value="{{ $attendance->clock_in ?? '-' }}">
+                                <input type="time" name="clock_in" value="{{ $attendance->clock_in->format('H:i') ?? '-' }}">
                                 <p>～</p>
-                                <input type="time" name="clock_out" value="{{ $attendance->clock_out ?? '-' }}">
+                                <input type="time" name="clock_out" value="{{ $attendance->clock_out->format('H:i') ?? '-' }}">
                             </div>
                         </td>
                     </tr>
 
+                    @foreach ($attendance->breaks as $break)
+                        <tr>
+                            <th class="attendance-table__show--th">休憩</th>
+                            <td class="attendance-table__show--td">
+                                <div class="time-range">
+                                    <input type="time" name="break_start[]" value="{{ $break->break_start->format('H:i') ?? '-' }}">
+                                    <p>～</p>
+                                    <input type="time" name="break_end[]" value="{{ $break->break_end->format('H:i') ?? '-' }}">
+                                </div>
+                            </td>
+                        </tr>
+                    @endforeach
+
+                    {{-- 空欄1行 --}}
                     <tr>
                         <th class="attendance-table__show--th">休憩</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <input type="time" name="break_start" value="{{ $attendance->break_start ?? '-' }}">
+                                <input type="time" name="break_start[]">
                                 <p>～</p>
-                                <input type="time" name="break_end" value="{{ $attendance->break_end ?? '-' }}">
+                                <input type="time" name="break_end[]">
                             </div>
                         </td>
                     </tr>

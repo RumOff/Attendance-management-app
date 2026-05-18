@@ -67,6 +67,7 @@
 
                             {{-- 休憩 --}}
                             <td>
+                                
                                 @if ($attendance && $attendance->break_minutes !== null)
                                     {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
                                 @endif

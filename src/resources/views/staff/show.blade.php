@@ -80,6 +80,8 @@
                         </td>
                     </tr>
                 </table>
+
+                
                 <div class="button-area">
                     <button type="submit" class="btn-black btn-submit">修正</button>
                 </div>

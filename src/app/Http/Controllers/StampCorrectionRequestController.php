@@ -5,6 +5,8 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use App\Models\AttendanceRequest;
+use App\Models\AttendanceRecord;
+use App\Models\BreakTime;
 
 class StampCorrectionRequestController extends Controller
 {
@@ -32,20 +34,77 @@ class StampCorrectionRequestController extends Controller
 
     public function storeRequests(Request $request){
 
-        AttendanceRequest::create([
-            'user_id' => auth()->id(),
-            'attendance_id' => $request->attendance_id,
+        $attendanceRequest = AttendanceRequest::where('attendance_id', $request->attendance_id)
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->first();
+
+        // 承認済みの場合は更新
+        if ($attendanceRequest && $attendanceRequest->status === 'approved') {
+
+            $attendance = AttendanceRecord::findOrFail($request->attendance_id);
+
+            $attendance->update([
+                'clock_in' => $request->clock_in,
+                'clock_out' => $request->clock_out,
+                'remarks' => $request->remarks,
+            ]);
+
+            // 既存の休憩の更新
+            foreach ($attendance->breaks as $index => $break) {
+                $break->update([
+                    'break_start' => $request->break_start[$index],
+                    'break_end' => $request->break_end[$index],
+                ]);
+            }
+
+            // 新規の休憩
+            $lastIndex = count($request->break_start) - 1;
+
+            if ($request->break_start[$lastIndex]
+                && $request->break_end[$lastIndex]) {
+
+                BreakTime::create([
+                    'attendance_id' => $attendance->id,
+                    'break_start' => $request->break_start[$lastIndex],
+                    'break_end' => $request->break_end[$lastIndex],
+                ]);
+            }
+
+        } else {
+
+            // 未申請の場合は新規レコード作成
+            AttendanceRequest::create([
+                'user_id' => auth()->id(),
+                'attendance_id' => $request->attendance_id,
+            ]);
+        }
+
+        return back();
+
+    }
+
+    public function approve($id){
+
+        $attendanceRequest = AttendanceRequest::findOrFail($id);
+
+        $attendanceRequest->update([
+            'status' => 'approved',
+        ]);
+
+        return back();
+    }
+
+    public function update(Request $request, $id){
+
+        $attendance = AttendanceRecord::findOrFail($id);
+
+        $attendance->update([
             'clock_in' => $request->clock_in,
             'clock_out' => $request->clock_out,
             'remarks' => $request->remarks,
-            
         ]);
 
-        return redirect()->route('staff.requests');
-    }
-
-    public function approve(){
-
-        return view('admin.approval');
+        return back();
     }
 }

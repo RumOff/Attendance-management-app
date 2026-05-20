@@ -137,7 +137,13 @@ class StaffController extends Controller
             ->with('breaks', 'user')
             ->findOrFail($attendance_id);
 
-        return view('staff.show', compact('attendance'));
+        $attendanceRequest = AttendanceRequest::where('attendance_id', $attendance->id)
+            ->where('user_id', auth()->id())
+            ->latest()
+            ->first();
+
+
+        return view('staff.show', compact('attendance','attendanceRequest'));
     }
     
 }

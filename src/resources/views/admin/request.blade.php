@@ -14,8 +14,8 @@
 
             {{-- タブ --}}
             <div class="attendance-tab">
-                <a href="{{ route('requests.index') }}" class="attendance-tab__link">承認待ち</a>
-                <a href="{{ route('requests.index') }}" class="attendance-tab__link">承認済み</a>
+                <a href="/stamp_correction_request/list/pending" class="{{ $status === 'pending' ? 'active' : '' }} attendance-tab__link">承認待ち</a>
+                <a href="/stamp_correction_request/list/approved" class="{{ $status === 'approved' ? 'active' : '' }}  attendance-tab__link">承認済み</a>
             </div>
 
 
@@ -69,7 +69,11 @@
                             {{-- 詳細 --}}
                             <td>
                                 @if($request->attendance->id && $request->attendance->id !== null)
-                                    <a href="/attendance/detail/{{ $request->attendance->id }}" class="history__detail">詳細</a>
+                                    @if (Auth::guard('admin')->check())
+                                        <a href="/admin/attendance/{{ $request->attendance->id }}" class="history__detail">詳細</a>
+                                    @elseif(Auth::guard('web')->check())
+                                        <a href="/attendance/detail/{{ $request->attendance->id }}" class="history__detail">詳細</a>
+                                    @endif
                                 @else
                                     <p class="history__detail">詳細</p>
                                 @endif

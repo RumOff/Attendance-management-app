@@ -34,7 +34,7 @@ Route::middleware(['auth:admin'])->group(function () {
     Route::get('admin/attendance/list', [AdminController::class, 'history'])->name('admin.history');
 
     // 勤怠詳細
-    Route::get('admin/attendance/detail/{id}', [AdminController::class, 'show'])->name('admin.show');
+    Route::get('admin/attendance/{id}', [AdminController::class, 'show'])->name('admin.show');
 
     // スタッフ一覧
     Route::get('admin/staff/list', [AdminController::class, 'staffList'])->name('admin.staffList');
@@ -51,4 +51,6 @@ Route::middleware(['auth:admin'])->group(function () {
 
 // 申請一覧
     Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('requests.index');
+    Route::get('/stamp_correction_request/list/{status?}',[StampCorrectionRequestController::class, 'index']);
+
     Route::post('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'storeRequests'])->name('requests.storeRequests');

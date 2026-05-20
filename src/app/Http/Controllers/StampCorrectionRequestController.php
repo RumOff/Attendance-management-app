@@ -10,25 +10,28 @@ use App\Models\BreakTime;
 
 class StampCorrectionRequestController extends Controller
 {
-    public function index(){
+    public function index($status = 'pending'){
 
         // ******** 管理者 ********
         if (Auth::guard('admin')->check()) {
-            
+
             // 管理者用データ取得
-            $requests = AttendanceRequest::with('user')->get();
-            
-            return view('admin.request', compact('requests'));
+            $requests = AttendanceRequest::with('user')
+                ->where('status', $status)
+                ->get();
+
+            return view('admin.request', compact('requests','status'));
         }
 
         // ******** 一般ユーザー ********
         $requests = AttendanceRequest::with('attendance')
         ->where('user_id', auth()->id())
         ->with('user')
+        ->where('status', $status)
         ->get();
-        
-        return view('admin.request', compact('requests'));
-        
+        // dd($status);
+        return view('admin.request', compact('requests','status'));
+
     }
 
 
@@ -80,7 +83,8 @@ class StampCorrectionRequestController extends Controller
             ]);
         }
 
-        return back();
+        return view('staff.show', compact('attendance','attendanceRequest'));
+      
 
     }
 

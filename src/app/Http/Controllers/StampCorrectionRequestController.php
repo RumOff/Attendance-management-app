@@ -37,6 +37,43 @@ class StampCorrectionRequestController extends Controller
 
     public function storeRequests(Request $request){
 
+        if (Auth::guard('admin')->check()) {
+
+            $attendance = AttendanceRecord::findOrFail(
+                $request->attendance_id
+            );
+
+            $attendance->update([
+                'clock_in' => $request->clock_in,
+                'clock_out' => $request->clock_out,
+                'remarks' => $request->remarks,
+            ]);
+
+            // 既存の休憩
+            foreach ($attendance->breaks as $index => $break) {
+                $break->update([
+                    'break_start' => $request->break_start[$index],
+                    'break_end' => $request->break_end[$index],
+                ]);
+            }
+
+            // 新規の休憩
+            $lastIndex = count($request->break_start) - 1;
+
+            if ($request->break_start[$lastIndex]
+                && $request->break_end[$lastIndex]) {
+
+                BreakTime::create([
+                    'attendance_id' => $attendance->id,
+                    'break_start' => $request->break_start[$lastIndex],
+                    'break_end' => $request->break_end[$lastIndex],
+                ]);
+            }
+
+
+            return back();
+        }
+
         $attendanceRequest = AttendanceRequest::where('attendance_id', $request->attendance_id)
             ->where('user_id', auth()->id())
             ->latest()
@@ -53,7 +90,7 @@ class StampCorrectionRequestController extends Controller
                 'remarks' => $request->remarks,
             ]);
 
-            // 既存の休憩の更新
+            // 既存の休憩
             foreach ($attendance->breaks as $index => $break) {
                 $break->update([
                     'break_start' => $request->break_start[$index],
@@ -84,7 +121,19 @@ class StampCorrectionRequestController extends Controller
         }
 
         return view('staff.show', compact('attendance','attendanceRequest'));
-      
+
+    }
+
+    public function showApprove($id){
+
+        $attendanceRequest = AttendanceRequest::with(
+            'user',
+            'attendance.breaks'
+            )->findOrFail($id);
+        
+        return view('admin.approval', compact(
+            'attendanceRequest'
+        ));
 
     }
 

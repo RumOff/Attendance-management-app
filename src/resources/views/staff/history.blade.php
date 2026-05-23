@@ -14,14 +14,14 @@
 
             {{-- カレンダー --}}
             <div class="month-nav">
-                <a href="{{ route('staff.history') }}" class="month-nav__link"><span>←</span> 前月</a>
+                <a href="{{ url()->current() }}?month={{ $prevMonth }}" class="month-nav__link"><span>←</span> 前月</a>
 
                 <div class="month-nav__display">
                     <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
                     <span>{{ $currentMonth->format('Y/m') }}</span>
                 </div>
 
-                <a href="{{ route('staff.history') }}" class="month-nav__link">翌月 <span>→</span></a>
+                <a href="{{ url()->current() }}?month={{ $nextMonth }}" class="month-nav__link">翌月 <span>→</span></a>
             </div>
 
             {{-- テーブル --}}
@@ -67,7 +67,7 @@
 
                             {{-- 休憩 --}}
                             <td>
-                                
+
                                 @if ($attendance && $attendance->break_minutes !== null)
                                     {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
                                 @endif

@@ -107,9 +107,8 @@ class StaffController extends Controller
     }
 
     public function history(Request $request){
-        $month = $request->input('month');
-        $currentMonth = $month
-            ? Carbon::createFromFormat('Y-m', $month)
+        $currentMonth = $request->month
+            ? Carbon::createFromFormat('Y-m', $request->month)
             : Carbon::now();
 
         // 該当月のはじめと終わりの日にち取得(copy()で$currentMonthを書き換えない)
@@ -128,7 +127,11 @@ class StaffController extends Controller
         });
         // 日付をキーにした配列に変換 ↑
 
-        return view('staff.history', compact('dates', 'attendances', 'currentMonth'));
+        // 今月と来月を作る
+        $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
+        return view('staff.history', compact('dates', 'attendances', 'currentMonth','prevMonth','nextMonth'));
     }
 
     public function show($attendance_id){

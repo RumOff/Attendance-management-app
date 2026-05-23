@@ -79,7 +79,7 @@
 
                             <td>
                                 @if($attendance && $attendance->id !== null)
-                                    <a href="/attendance/detail/{{ $attendance->id }}" class="history__detail">詳細</a>
+                                    <a href="/admin/attendance/{{ $attendance->id }}" class="history__detail">詳細</a>
                                 @else
                                     <p class="history__detail">詳細</p>
                                 @endif

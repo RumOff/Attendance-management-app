@@ -15,14 +15,14 @@
 
             {{-- カレンダー --}}
             <div class="month-nav">
-                <a href="{{ route('admin.history') }}" class="month-nav__link"><span>←</span> 前日</a>
+                <a href="{{ url()->current() }}?date={{ $prevDate }}" class="month-nav__link"><span>←</span> 前日</a>
 
                 <div class="month-nav__display">
                     <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
                     <span>{{ $currentDate->format('Y/m/d') }}</span>
                 </div>
 
-                <a href="{{ route('admin.history') }}" class="month-nav__link">翌日 <span>→</span></a>
+                <a href="{{ url()->current() }}?date={{ $nextDate }}" class="month-nav__link">翌日 <span>→</span></a>
             </div>
 
             {{-- テーブル --}}

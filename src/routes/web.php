@@ -12,6 +12,7 @@ Route::post('/admin/logout', [AdminController::class, 'logout']);
 
 // ******** 一般ユーザー ********
 Route::middleware(['auth:web'])->group(function (){
+
     //  勤怠登録
     Route::get('/attendance', [StaffController::class, 'index'])->name('staff.index');
     Route::post('/attendance', [StaffController::class, 'store'])->name('staff.store');
@@ -22,14 +23,12 @@ Route::middleware(['auth:web'])->group(function (){
     // 勤怠詳細
     Route::get('/attendance/detail/{id}', [StaffController::class, 'show'])->name('staff.show');
 
-    // // 申請一覧
-    // Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('staff.requests');
-    // Route::post('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'storeRequests'])->name('staff.storeRequests');
 });
 
 
 // ******** 管理者 ********
 Route::middleware(['auth:admin'])->group(function () {
+
     // 勤怠一覧
     Route::get('admin/attendance/list', [AdminController::class, 'history'])->name('admin.history');
 
@@ -42,15 +41,18 @@ Route::middleware(['auth:admin'])->group(function () {
     // スタッフ別勤怠一覧
     Route::get('admin/attendance/staff/{id}', [AdminController::class, 'staffAttendance'])->name('admin.staffAttendance');
 
-    // 申請一覧
-    // Route::get('stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('admin.requests');
-    // Route::post('stamp_correction_request/list', [StampCorrectionRequestController::class, 'storeRequests'])->name('admin.storeRequests');
-    Route::get('stamp_correction_request/approve/{attendance_correct_request_id}', [StampCorrectionRequestController::class, 'approve'])->name('admin.approve');
+    // 申請承認一覧
+    Route::get('stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'showApprove'])->name('admin.showApprove');
+    Route::patch(
+    '/stamp_correction_request/approve/{id}',[StampCorrectionRequestController::class, 'approve'])->name('requests.approve');
 
 });
 
-// 申請一覧
-    Route::get('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'index'])->name('requests.index');
-    Route::get('/stamp_correction_request/list/{status?}',[StampCorrectionRequestController::class, 'index']);
+Route::middleware(['any.auth'])->group(function () {
+
+    // 申請一覧
+    Route::get('/stamp_correction_request/list/{status?}',[StampCorrectionRequestController::class, 'index'])->name('requests.index');
 
     Route::post('/stamp_correction_request/list', [StampCorrectionRequestController::class, 'storeRequests'])->name('requests.storeRequests');
+
+});

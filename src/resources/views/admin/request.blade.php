@@ -70,7 +70,7 @@
                             <td>
                                 @if($request->attendance->id && $request->attendance->id !== null)
                                     @if (Auth::guard('admin')->check())
-                                        <a href="/admin/attendance/{{ $request->attendance->id }}" class="history__detail">詳細</a>
+                                        <a href="{{ route('admin.showApprove', $request->id) }}" class="history__detail">詳細</a>
                                     @elseif(Auth::guard('web')->check())
                                         <a href="/attendance/detail/{{ $request->attendance->id }}" class="history__detail">詳細</a>
                                     @endif

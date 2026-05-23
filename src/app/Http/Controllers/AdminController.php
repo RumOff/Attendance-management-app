@@ -43,16 +43,20 @@ class AdminController extends Controller
     }
 
     public function history(Request $request){
-        $date = $request->input('date');
-        $currentDate = $date
-            ? Carbon::createFromFormat('Y-m-d', $date)
-            : Carbon::now();
-        
+        $currentDate = $request->date
+            ? Carbon::parse($request->date)
+            : Carbon::today();
+            
         $attendances = AttendanceRecord::whereDate('date', $currentDate)
             ->with('breaks')
             ->with('user')
             ->get();
-        return view('admin.history', compact('attendances', 'currentDate'));
+
+        // 前日と翌日を作る
+        $prevDate = $currentDate->copy()->subDay();
+        $nextDate = $currentDate->copy()->addDay();
+
+        return view('admin.history', compact('attendances', 'currentDate','prevDate' ,'nextDate'));
     }
 
     public function show($id){

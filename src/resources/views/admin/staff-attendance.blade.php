@@ -14,14 +14,14 @@
 
             {{-- カレンダー --}}
             <div class="month-nav">
-                <a href="{{ route('staff.history') }}" class="month-nav__link"><span>←</span> 前月</a>
+                <a href="{{ route('admin.staffAttendance', $user->id) }}" class="month-nav__link"><span>←</span> 前月</a>
 
                 <div class="month-nav__display">
                     <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
                     <span>{{ $currentMonth->format('Y/m') }}</span>
                 </div>
 
-                <a href="{{ route('staff.history') }}" class="month-nav__link">翌月 <span>→</span></a>
+                <a href="{{ route('admin.staffAttendance', $user->id) }}" class="month-nav__link">翌月 <span>→</span></a>
             </div>
 
             <table class="attendance-table">

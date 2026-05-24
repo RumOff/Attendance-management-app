@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Http\Requests\AdminLoginRequest;
 use App\Models\AttendanceRecord;
 use App\Models\BreakTime;
 use App\Models\AttendanceRequest;
@@ -17,10 +18,8 @@ class AdminController extends Controller
         return view('auth.admin-login');
     }
 
-    public function login(Request $request){
+    public function login(AdminLoginRequest $request){
     
-        Auth::guard('web')->logout();
-
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
@@ -31,7 +30,7 @@ class AdminController extends Controller
         }
 
         return back()->withErrors([
-            'email' => 'ログインできません',
+            'email' => 'ログイン情報が登録されていません',
         ]);
     }
 

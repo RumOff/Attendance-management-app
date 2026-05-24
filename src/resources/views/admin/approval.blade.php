@@ -37,9 +37,9 @@
                     <td class="attendance-table__show--td">
                         <div class="time-range">
                             <p>
-                                {{ $attendanceRequest->attendance->clock_in->format('H:i') ?? '-' }}
+                                {{ optional($attendanceRequest->attendance->clock_in)->format('H:i') }}
                                 ～
-                                {{ $attendanceRequest->attendance->clock_out->format('H:i') ?? '-' }}
+                                {{ optional($attendanceRequest->attendance->clock_out)->format('H:i') }}
                             </p>
                         </div>
                     </td>

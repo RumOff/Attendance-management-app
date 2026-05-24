@@ -5,6 +5,10 @@ use App\Http\Controllers\AdminController;
 use App\Http\Controllers\StaffController;
 use App\Http\Controllers\StampCorrectionRequestController;
 
+Route::get('/', function () {
+    return redirect('/login');
+});
+
 // ******** 管理者ログイン ********
 Route::get('/admin/login', [AdminController::class, 'showLoginForm']);
 Route::post('/admin/login', [AdminController::class, 'login']);

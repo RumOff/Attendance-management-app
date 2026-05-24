@@ -70,7 +70,6 @@ class StampCorrectionRequestController extends Controller
                 ]);
             }
 
-
             return back();
         }
 
@@ -118,6 +117,8 @@ class StampCorrectionRequestController extends Controller
                 'user_id' => auth()->id(),
                 'attendance_id' => $request->attendance_id,
             ]);
+
+            $attendance = AttendanceRecord::findOrFail($request->attendance_id);
         }
 
         return view('staff.show', compact('attendance','attendanceRequest'));

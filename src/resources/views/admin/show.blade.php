@@ -39,9 +39,9 @@
                         <th class="attendance-table__show--th">出勤・退勤</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <input type="time" name="clock_in" value="{{ $attendance->clock_in->format('H:i') ?? '-' }}">
+                                <input type="time" name="clock_in" value="{{ optional($attendance->clock_in)->format('H:i') }}">
                                 <p>～</p>
-                                <input type="time" name="clock_out" value="{{ $attendance->clock_out->format('H:i') ?? '-' }}">
+                                <input type="time" name="clock_out" value="{{ optional($attendance->clock_out)->format('H:i') }}">
                             </div>
                         </td>
                     </tr>
@@ -51,9 +51,9 @@
                             <th class="attendance-table__show--th">休憩</th>
                             <td class="attendance-table__show--td">
                                 <div class="time-range">
-                                    <input type="time" name="break_start[]" value="{{ $break->break_start->format('H:i') ?? '-' }}">
+                                    <input type="time" name="break_start[]" value="{{ optional($break->break_start)->format('H:i') }}">
                                     <p>～</p>
-                                    <input type="time" name="break_end[]" value="{{ $break->break_end->format('H:i') ?? '-' }}">
+                                    <input type="time" name="break_end[]" value="{{ optional($break->break_end)->format('H:i') }}">
                                 </div>
                             </td>
                         </tr>
@@ -74,7 +74,7 @@
                     <tr>
                         <th class="attendance-table__show--th">備考</th>
                         <td class="attendance-table__show--td">
-                            <textarea name="remarks" id=""></textarea>
+                            <textarea name="remarks" id="">{{ $attendance->remarks }}</textarea>
 
                             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                         </td>

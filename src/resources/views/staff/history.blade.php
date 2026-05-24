@@ -54,14 +54,14 @@
                             {{-- 出勤 --}}
                             <td>
                                 @if ($attendance && $attendance->clock_in)
-                                    {{ $attendance->clock_in->format('H:i') ?? null }}
+                                    {{ optional($attendance->clock_in)->format('H:i') }}
                                 @endif
                             </td>
 
                             {{-- 退勤 --}}
                             <td>
                                 @if ($attendance && $attendance->clock_out)
-                                {{ $attendance->clock_out->format('H:i') ?? null }}
+                                {{ optional($attendance->clock_out)->format('H:i') }}
                                 @endif
                             </td>
 

@@ -50,12 +50,12 @@
 
                             {{-- 出勤 --}}
                             <td class="history__table--data">
-                                {{ $attendance->clock_in->format('H:i') ?? null }}
+                                {{ optional($attendance->clock_in)->format('H:i') }}
                             </td>
 
                             {{-- 退勤 --}}
                             <td class="history__table--data">
-                                {{ $attendance->clock_out->format('H:i') ?? null }}
+                                {{ optional($attendance->clock_out)->format('H:i') }}
                             </td>
 
                             {{-- 休憩 --}}

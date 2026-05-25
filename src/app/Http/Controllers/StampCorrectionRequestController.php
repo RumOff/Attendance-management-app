@@ -7,6 +7,7 @@ use Illuminate\Support\Facades\Auth;
 use App\Models\AttendanceRequest;
 use App\Models\AttendanceRecord;
 use App\Models\BreakTime;
+use App\Http\Requests\AttendanceUpdateRequest;
 
 class StampCorrectionRequestController extends Controller
 {
@@ -35,7 +36,7 @@ class StampCorrectionRequestController extends Controller
     }
 
 
-    public function storeRequests(Request $request){
+    public function storeRequests(AttendanceUpdateRequest $request){
 
         if (Auth::guard('admin')->check()) {
 
@@ -149,16 +150,16 @@ class StampCorrectionRequestController extends Controller
         return back();
     }
 
-    public function update(Request $request, $id){
+    // public function update(Request $request, $id){
 
-        $attendance = AttendanceRecord::findOrFail($id);
+    //     $attendance = AttendanceRecord::findOrFail($id);
 
-        $attendance->update([
-            'clock_in' => $request->clock_in,
-            'clock_out' => $request->clock_out,
-            'remarks' => $request->remarks,
-        ]);
+    //     $attendance->update([
+    //         'clock_in' => $request->clock_in,
+    //         'clock_out' => $request->clock_out,
+    //         'remarks' => $request->remarks,
+    //     ]);
 
-        return back();
-    }
+    //     return back();
+    // }
 }

@@ -3,6 +3,7 @@
 namespace App\Http\Requests;
 
 use Illuminate\Foundation\Http\FormRequest;
+use Carbon\Carbon;
 
 class AttendanceUpdateRequest extends FormRequest
 {
@@ -24,6 +25,8 @@ class AttendanceUpdateRequest extends FormRequest
     public function rules()
     {
         return [
+            'clock_in' => ['nullable'],
+            'clock_out' => ['nullable'],
             'remarks' => ['required'],
         ];
     }
@@ -31,7 +34,7 @@ class AttendanceUpdateRequest extends FormRequest
     public function messages()
     {
         return [
-            'note.required' => '備考を記入してください',
+            'remarks.required' => '備考を記入してください',
         ];
     }
 
@@ -39,12 +42,21 @@ class AttendanceUpdateRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
+        // $clockIn = filled($this->clock_in)
+        //     ? Carbon::createFromFormat('H:i', $this->clock_in)
+        //     : null;
+
+        // $clockOut =  filled($this->clock_out)
+        //     ? Carbon::createFromFormat('H:i', $this->clock_out)
+        //     : null;
+
         $clockIn = $this->clock_in;
         $clockOut = $this->clock_out;
-        $breakStart = $this->break_start;
-        $breakEnd = $this->break_end;
 
-        if ($clockIn >= $clockOut) {
+        $breakStarts = $this->break_start ?? [];
+        $breakEnds = $this->break_end ?? [];
+
+        if ($clockIn && $clockOut && $clockIn >= $clockOut) {
 
             $validator->errors()->add(
                 'clock_in',
@@ -52,21 +64,40 @@ class AttendanceUpdateRequest extends FormRequest
             );
         }
 
+        foreach ($breakStarts as $index => $breakStart) {
 
-        if ($breakStart >= $clockIn || $clockOut >= $breakStart) {
+            $breakEnd = $breakEnds[$index] ?? null;
 
-            $validator->errors()->add(
-                'break_start',
-                '休憩時間が不適切な値です'
-            );
-        }
+            // 両方空ならスキップ
+            if (empty($breakStart) && empty($breakEnd)) {
+                continue;
+            }
 
-        if ($breakEnd >= $clockOut) {
+            // $breakStart =  filled($breakStart)
+            // ? Carbon::createFromFormat('H:i', $breakStart)
+            // : null;
 
-            $validator->errors()->add(
-                'clock_in',
-                '休憩時間もしくは退勤時間が不適切な値です'
-            );
+            // $breakEnd =  filled($breakEnd)
+            // ? Carbon::createFromFormat('H:i', $breakEnd)
+            // : null;
+
+            // 休憩開始チェック
+            if ($breakStart && (strtotime($breakStart) < strtotime($clockIn) || strtotime($breakStart) > strtotime($clockOut))) {
+dd('休憩終了エラー入った');
+                $validator->errors()->add(
+                    'break_start',
+                    '休憩時間が不適切な値です'
+                );
+            }
+
+            // 休憩終了チェック
+            if ($breakEnd && $breakEnd > $clockOut) {
+
+                $validator->errors()->add(
+                    'break_end',
+                    '休憩時間もしくは退勤時間が不適切な値です'
+                );
+            }
         }
     });
 }

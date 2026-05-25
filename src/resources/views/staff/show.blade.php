@@ -42,9 +42,11 @@
                                 <input type="time" name="clock_in" value="{{ optional($attendance->clock_in)->format('H:i') }}">
                                 <p>～</p>
                                 <input type="time" name="clock_out" value="{{ optional($attendance->clock_out)->format('H:i') }}">
+
                             </div>
                         </td>
                     </tr>
+                    <p class="error">@error('clock_in'){{ $message }}@enderror</p>
 
                     @foreach ($attendance->breaks as $break)
                         <tr>
@@ -55,6 +57,10 @@
                                     <p>～</p>
                                     <input type="time" name="break_end[]" value="{{ optional($break->break_end)->format('H:i') }}">
                                 </div>
+
+                                <p class="error">@error('break_start.$index'){{ $message }}@enderror</p>
+                                <p class="error">@error('break_end.$index'){{ $message }}@enderror</p>
+
                             </td>
                         </tr>
                     @endforeach
@@ -75,7 +81,7 @@
                         <th class="attendance-table__show--th">備考</th>
                         <td class="attendance-table__show--td">
                             <textarea name="remarks" id="">{{ $attendance->remarks }}</textarea>
-
+                            <p class="error">@error('remarks'){{ $message }}@enderror</p>
                             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                         </td>
                     </tr>

@@ -42,20 +42,13 @@ class AttendanceUpdateRequest extends FormRequest
     {
         $validator->after(function ($validator) {
 
-        // $clockIn = filled($this->clock_in)
-        //     ? Carbon::createFromFormat('H:i', $this->clock_in)
-        //     : null;
-
-        // $clockOut =  filled($this->clock_out)
-        //     ? Carbon::createFromFormat('H:i', $this->clock_out)
-        //     : null;
-
         $clockIn = $this->clock_in;
         $clockOut = $this->clock_out;
 
         $breakStarts = $this->break_start ?? [];
         $breakEnds = $this->break_end ?? [];
 
+        // 出勤・退勤チェック
         if ($clockIn && $clockOut && $clockIn >= $clockOut) {
 
             $validator->errors()->add(
@@ -73,28 +66,37 @@ class AttendanceUpdateRequest extends FormRequest
                 continue;
             }
 
-            // $breakStart =  filled($breakStart)
-            // ? Carbon::createFromFormat('H:i', $breakStart)
-            // : null;
+            $clockInTime = strtotime($clockIn);
+            $clockOutTime = strtotime($clockOut);
 
-            // $breakEnd =  filled($breakEnd)
-            // ? Carbon::createFromFormat('H:i', $breakEnd)
-            // : null;
+            $breakStartTime = strtotime($breakStart);
+            $breakEndTime = strtotime($breakEnd);
 
-            // 休憩開始チェック
-            if ($breakStart && (strtotime($breakStart) < strtotime($clockIn) || strtotime($breakStart) > strtotime($clockOut))) {
-dd('休憩終了エラー入った');
+            /// 休憩開始チェック
+            if (
+                $breakStart &&
+                (
+                    $breakStartTime < $clockInTime ||
+                    $breakStartTime > $clockOutTime
+                )
+            ) {
+
                 $validator->errors()->add(
-                    'break_start',
+                    "break_start.$index",
                     '休憩時間が不適切な値です'
                 );
             }
 
             // 休憩終了チェック
-            if ($breakEnd && $breakEnd > $clockOut) {
+            if (
+                $breakEnd &&
+                (
+                    $breakEndTime > $clockOutTime
+                )
+            ) {
 
                 $validator->errors()->add(
-                    'break_end',
+                    "break_end.$index",
                     '休憩時間もしくは退勤時間が不適切な値です'
                 );
             }

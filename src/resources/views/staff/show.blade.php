@@ -1,4 +1,4 @@
- @extends('layouts.app')
+@extends('layouts.app')
 
 @section('css')
     <link rel="stylesheet" href="{{ asset('css/common.css') }}">
@@ -39,48 +39,54 @@
                         <th class="attendance-table__show--th">出勤・退勤</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <input type="time" name="clock_in" value="{{ optional($attendance->clock_in)->format('H:i') }}">
+                                <input type="time" name="clock_in" value="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) }}">
                                 <p>～</p>
-                                <input type="time" name="clock_out" value="{{ optional($attendance->clock_out)->format('H:i') }}">
-
+                                <input type="time" name="clock_out" value="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) }}">
+                                <p class="error">@error('clock_in'){{ $message }}@enderror</p>
                             </div>
                         </td>
                     </tr>
-                    <p class="error">@error('clock_in'){{ $message }}@enderror</p>
 
-                    @foreach ($attendance->breaks as $break)
+
+                    @foreach ($attendance->breaks as $index => $break)
                         <tr>
                             <th class="attendance-table__show--th">休憩</th>
                             <td class="attendance-table__show--td">
                                 <div class="time-range">
-                                    <input type="time" name="break_start[]" value="{{ optional($break->break_start)->format('H:i') }}">
+                                    <input type="time" name="break_start[]" value="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) }}">
                                     <p>～</p>
-                                    <input type="time" name="break_end[]" value="{{ optional($break->break_end)->format('H:i') }}">
+                                    <input type="time" name="break_end[]" value="{{ old('break_end.' . $index,optional($break->break_end)->format('H:i')) }}">
                                 </div>
 
-                                <p class="error">@error('break_start.$index'){{ $message }}@enderror</p>
-                                <p class="error">@error('break_end.$index'){{ $message }}@enderror</p>
+                                <p class="error">@error("break_start.$index"){{ $message }}@enderror</p>
+                                <p class="error">@error("break_end.$index"){{ $message }}@enderror</p>
 
                             </td>
                         </tr>
-                    @endforeach
+                        @endforeach
 
-                    {{-- 空欄1行 --}}
-                    <tr>
-                        <th class="attendance-table__show--th">休憩</th>
-                        <td class="attendance-table__show--td">
-                            <div class="time-range">
-                                <input type="time" name="break_start[]">
-                                <p>～</p>
-                                <input type="time" name="break_end[]">
-                            </div>
+                        {{-- 空欄1行 --}}
+                        <tr>
+                            <th class="attendance-table__show--th">休憩</th>
+                            <td class="attendance-table__show--td">
+                                <div class="time-range">
+                                    <input type="time" name="break_start[]" value="{{ old('break_start.'.count($attendance->breaks)) }}">
+                                    <p>～</p>
+                                    <input type="time" name="break_end[]" value="{{ old('break_end.'.count($attendance->breaks)) }}">
+                                </div>
+                                <p class="error">
+                                    @error('break_start.'.count($attendance->breaks)){{ $message }}@enderror
+                                </p>
+                                <p class="error">
+                                    @error('break_end.'.count($attendance->breaks)){{ $message }}@enderror
+                                </p>
                         </td>
                     </tr>
 
                     <tr>
                         <th class="attendance-table__show--th">備考</th>
                         <td class="attendance-table__show--td">
-                            <textarea name="remarks" id="">{{ $attendance->remarks }}</textarea>
+                            <textarea name="remarks" id="">{{ old('remarks',$attendance->remarks) }}</textarea>
                             <p class="error">@error('remarks'){{ $message }}@enderror</p>
                             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                         </td>

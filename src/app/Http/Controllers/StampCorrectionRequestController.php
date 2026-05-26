@@ -37,7 +37,7 @@ class StampCorrectionRequestController extends Controller
 
 
     public function storeRequests(AttendanceUpdateRequest $request){
-
+        
         if (Auth::guard('admin')->check()) {
 
             $attendance = AttendanceRecord::findOrFail(
@@ -119,8 +119,8 @@ class StampCorrectionRequestController extends Controller
                 'attendance_id' => $request->attendance_id,
             ]);
 
-            $attendance = AttendanceRecord::findOrFail($request->attendance_id);
         }
+        $attendance = AttendanceRecord::findOrFail($request->attendance_id);
 
         return view('staff.show', compact('attendance','attendanceRequest'));
 

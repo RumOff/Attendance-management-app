@@ -14,6 +14,7 @@ Route::get('/admin/login', [AdminController::class, 'showLoginForm']);
 Route::post('/admin/login', [AdminController::class, 'login']);
 Route::post('/admin/logout', [AdminController::class, 'logout']);
 
+
 // ******** 一般ユーザー ********
 Route::middleware(['auth:web'])->group(function (){
 

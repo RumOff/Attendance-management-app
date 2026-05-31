@@ -25,16 +25,19 @@ class AttendanceUpdateRequest extends FormRequest
     public function rules()
     {
         return [
-            'clock_in' => ['nullable'],
-            'clock_out' => ['nullable'],
-            'remarks' => ['required'],
+            'clock_in' => ['required'],
+            'clock_out' => ['required'],
+            'remarks' => ['required', 'max:255'],
         ];
     }
 
     public function messages()
     {
         return [
+            'clock_in.required' => '出勤時間を入力してください',
+            'clock_out.required' => '退勤時間を入力してください',
             'remarks.required' => '備考を記入してください',
+            'remarks.max' => '備考は255文字以内で入力してください',
         ];
     }
 
@@ -64,6 +67,20 @@ class AttendanceUpdateRequest extends FormRequest
             // 両方空ならスキップ
             if (empty($breakStart) && empty($breakEnd)) {
                 continue;
+            }
+
+            if ($breakStart && !$breakEnd) {
+                $validator->errors()->add(
+                    "break_end.$index",
+                    '休憩終了時間を入力してください'
+                );
+            }
+
+            if (!$breakStart && $breakEnd) {
+                $validator->errors()->add(
+                    "break_start.$index",
+                    '休憩開始時間を入力してください'
+                );
             }
 
             $clockInTime = strtotime($clockIn);
@@ -98,6 +115,17 @@ class AttendanceUpdateRequest extends FormRequest
                 $validator->errors()->add(
                     "break_end.$index",
                     '休憩時間もしくは退勤時間が不適切な値です'
+                );
+            }
+
+            if (
+                $breakStart &&
+                $breakEnd &&
+                $breakStartTime >= $breakEndTime
+            ) {
+                $validator->errors()->add(
+                    "break_start.$index",
+                    '休憩時間が不適切な値です'
                 );
             }
         }

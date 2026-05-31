@@ -285,6 +285,16 @@ textarea {
     text-decoration: none;
 }
 
+input[type="time"],
+input[type="text"] {
+    font-size: 14px;
+    font-family: "Noto Sans JP", sans-serif;
+    border: 1px solid #ddd;
+    border-radius: 2px;
+    text-align: center;
+    font-weight: bold;
+}
+
 /* エラー */
 .error {
     font-size: 12px;

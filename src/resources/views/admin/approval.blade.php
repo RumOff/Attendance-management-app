@@ -36,25 +36,21 @@
                     <th class="attendance-table__show--th">出勤・退勤</th>
                     <td class="attendance-table__show--td">
                         <div class="time-range">
-                            <p>
-                                {{ optional($attendanceRequest->attendance->clock_in)->format('H:i') }}
+                            <p>{{ optional($attendanceRequest->attendance->clock_in)->format('H:i') }}</p>
                                 ～
-                                {{ optional($attendanceRequest->attendance->clock_out)->format('H:i') }}
-                            </p>
+                            <p>{{ optional($attendanceRequest->attendance->clock_out)->format('H:i') }}</p>
                         </div>
                     </td>
                 </tr>
 
-                @foreach ($attendanceRequest->attendance->breaks as $break)
+                @foreach ($attendanceRequest->attendance->breaks as $index => $break)
                     <tr>
-                        <th class="attendance-table__show--th">休憩</th>
+                        <th class="attendance-table__show--th">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <p>
-                                    {{ $break->break_start->format('H:i') ?? '-' }}
+                                <p>{{ $break->break_start->format('H:i') ?? '-' }}</p>
                                     ～
-                                    {{ $break->break_end->format('H:i') ?? '-' }}
-                                </p>
+                                <p>{{ $break->break_end->format('H:i') ?? '-' }}</p>
                             </div>
                         </td>
                     </tr>
@@ -62,7 +58,7 @@
 
                 {{-- 空欄1行 --}}
                 <tr>
-                    <th class="attendance-table__show--th">休憩</th>
+                    <th class="attendance-table__show--th">休憩{{ $attendanceRequest->attendance->breaks->count() + 1 }}</th>
                     <td class="attendance-table__show--td">
                         <div class="time-range">
 

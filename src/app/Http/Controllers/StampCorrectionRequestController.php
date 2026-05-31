@@ -30,7 +30,7 @@ class StampCorrectionRequestController extends Controller
         ->with('user')
         ->where('status', $status)
         ->get();
-        // dd($status);
+        
         return view('admin.request', compact('requests','status'));
 
     }
@@ -150,16 +150,4 @@ class StampCorrectionRequestController extends Controller
         return back();
     }
 
-    // public function update(Request $request, $id){
-
-    //     $attendance = AttendanceRecord::findOrFail($id);
-
-    //     $attendance->update([
-    //         'clock_in' => $request->clock_in,
-    //         'clock_out' => $request->clock_out,
-    //         'remarks' => $request->remarks,
-    //     ]);
-
-    //     return back();
-    // }
 }

@@ -8,6 +8,8 @@ use App\Models\AttendanceRequest;
 use App\Models\AttendanceRecord;
 use App\Models\BreakTime;
 use App\Http\Requests\AttendanceUpdateRequest;
+use App\Models\BreakRequest;
+use Illuminate\Support\Facades\DB;
 
 class StampCorrectionRequestController extends Controller
 {
@@ -38,6 +40,7 @@ class StampCorrectionRequestController extends Controller
 
     public function storeRequests(AttendanceUpdateRequest $request){
         
+        //  管理者
         if (Auth::guard('admin')->check()) {
 
             $attendance = AttendanceRecord::findOrFail(
@@ -74,55 +77,43 @@ class StampCorrectionRequestController extends Controller
             return back();
         }
 
-        $attendanceRequest = AttendanceRequest::where('attendance_id', $request->attendance_id)
-            ->where('user_id', auth()->id())
-            ->latest()
-            ->first();
+        //  一般ユーザー
+        $attendanceRequest = AttendanceRequest::where(
+            'attendance_id',
+            $request->attendance_id
+        )
+        ->where('user_id', auth()->id())
+        ->latest()
+        ->first();
 
-        // 承認済みの場合は更新
-        if ($attendanceRequest && $attendanceRequest->status === 'approved') {
-
-            $attendance = AttendanceRecord::findOrFail($request->attendance_id);
-
-            $attendance->update([
-                'clock_in' => $request->clock_in,
-                'clock_out' => $request->clock_out,
-                'remarks' => $request->remarks,
-            ]);
-
-            // 既存の休憩
-            foreach ($attendance->breaks as $index => $break) {
-                $break->update([
-                    'break_start' => $request->break_start[$index],
-                    'break_end' => $request->break_end[$index],
-                ]);
-            }
-
-            // 新規の休憩
-            $lastIndex = count($request->break_start) - 1;
-
-            if ($request->break_start[$lastIndex]
-                && $request->break_end[$lastIndex]) {
-
-                BreakTime::create([
-                    'attendance_id' => $attendance->id,
-                    'break_start' => $request->break_start[$lastIndex],
-                    'break_end' => $request->break_end[$lastIndex],
-                ]);
-            }
-
-        } else {
-
-            // 未申請の場合は新規レコード作成
-            AttendanceRequest::create([
-                'user_id' => auth()->id(),
-                'attendance_id' => $request->attendance_id,
-            ]);
-
+        // 申請中は弾く
+        if ($attendanceRequest && $attendanceRequest->status === 'pending') {
+            return back();
         }
+
+        // 未申請または承認済みは新規作成
+        $attendanceRequest = AttendanceRequest::create([
+            'user_id' => auth()->id(),
+            'attendance_id' => $request->attendance_id,
+            'clock_in' => $request->clock_in,
+            'clock_out' => $request->clock_out,
+            'remarks' => $request->remarks,
+        ]);
+
+        foreach ($request->break_start as $index => $breakStart) {
+            if (!$breakStart) {
+                continue;
+            }
+            BreakRequest::create([
+                'attendance_request_id' => $attendanceRequest->id,
+                'break_start' => $breakStart,
+                'break_end' => $request->break_end[$index],
+            ]);
+        }
+
         $attendance = AttendanceRecord::findOrFail($request->attendance_id);
 
-        return view('staff.show', compact('attendance','attendanceRequest'));
+        return redirect()->back();
 
     }
 
@@ -132,7 +123,7 @@ class StampCorrectionRequestController extends Controller
             'user',
             'attendance.breaks'
             )->findOrFail($id);
-        
+
         return view('admin.approval', compact(
             'attendanceRequest'
         ));
@@ -141,13 +132,39 @@ class StampCorrectionRequestController extends Controller
 
     public function approve($id){
 
-        $attendanceRequest = AttendanceRequest::findOrFail($id);
+        $attendanceRequest = AttendanceRequest::with([
+            'attendance',
+            'breakRequests',
+        ])->findOrFail($id);
 
-        $attendanceRequest->update([
-            'status' => 'approved',
-        ]);
+        if ($attendanceRequest->status !== 'pending') {
+            return back();
+        }
 
-        return back();
+        DB::transaction(function () use ($attendanceRequest) {
+            $attendance = $attendanceRequest->attendance;
+            $attendance->update([
+                'clock_in' => $attendanceRequest->clock_in,
+                'clock_out' => $attendanceRequest->clock_out,
+                'remarks' => $attendanceRequest->remarks,
+            ]);
+
+            $attendance->breaks()->delete();
+
+            foreach ($attendanceRequest->breakRequests as $breakRequest) {
+                BreakTime::create([
+                    'attendance_id' => $attendance->id,
+                    'break_start' => $breakRequest->break_start,
+                    'break_end' => $breakRequest->break_end,
+                ]);
+            }
+
+            $attendanceRequest->update([
+                'status' => 'approved',
+            ]);
+        });
+
+        return redirect()->route('requests.index');
     }
 
 }

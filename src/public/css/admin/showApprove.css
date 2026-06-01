@@ -10,7 +10,7 @@
 .attendance-table .attendance-table__show--td {
     text-align: left;
     border-bottom: 1px solid #ddd;
-    padding: 17px;
+    padding: 20px;
 }
 
 .attendance-table tr:first-child td {
@@ -34,9 +34,23 @@
 
 .button-area {
     margin-top: 0;
+    display: flex;
+    justify-content: flex-end;
 }
 
 .time-range {
     margin-left: 6%;
     gap: 63px;
+}
+
+.approved-text {
+    background-color: rgb(109, 109, 109);
+    color: #ffffff;
+    /* font-weight: bold; */
+    border-radius: 3px;
+    width: 80px;
+    font-size: 13px;
+    text-align: center;
+    padding: 3px 8px;
+    letter-spacing: 2px;
 }

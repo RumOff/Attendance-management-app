@@ -39,11 +39,11 @@
                         <th class="attendance-table__show--th">出勤・退勤</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
-                                <input type="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) ? 'time' : 'text' }}" name="clock_in"
+                                <input class="attendance-input" type="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) ? 'time' : 'text' }}" name="clock_in"
                                     value="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                                 ～
-                                <input type="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) ? 'time' : 'text' }}" name="clock_out"
+                                <input class="attendance-input" type="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) ? 'time' : 'text' }}" name="clock_out"
                                     value="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                             </div>
@@ -57,11 +57,11 @@
                             </th>
                             <td class="attendance-table__show--td">
                                 <div class="time-range">
-                                    <input type="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) ? 'time' : 'text' }}"
+                                    <input class="attendance-input" type="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) ? 'time' : 'text' }}"
                                         name="break_start[]" value="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) }}"
                                         onfocus="this.type='time'" onblur="if(!this.value)this.type='text'">
                                     ～
-                                    <input type="{{ old('break_end.' . $index, optional($break->break_end)->format('H:i')) ? 'time' : 'text' }}"
+                                    <input class="attendance-input" type="{{ old('break_end.' . $index, optional($break->break_end)->format('H:i')) ? 'time' : 'text' }}"
                                         name="break_end[]" value="{{ old('break_end.' . $index, optional($break->break_end)->format('H:i')) }}"
                                         onfocus="this.type='time'" onblur="if(!this.value)this.type='text'">
                                     </div>
@@ -79,11 +79,11 @@
                                 @php
                                     $newIndex = count($attendance->breaks);
                                 @endphp
-                                <input type="{{ old('break_start.' . $newIndex) ? 'time' : 'text' }}" name="break_start[]"
+                                <input class="attendance-input" type="{{ old('break_start.' . $newIndex) ? 'time' : 'text' }}" name="break_start[]"
                                     value="{{ old('break_start.' . $newIndex) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                                 ～
-                                <input type="{{ old('break_end.' . $newIndex) ? 'time' : 'text' }}" name="break_end[]"
+                                <input class="attendance-input" type="{{ old('break_end.' . $newIndex) ? 'time' : 'text' }}" name="break_end[]"
                                     value="{{ old('break_end.' . $newIndex) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                             </div>

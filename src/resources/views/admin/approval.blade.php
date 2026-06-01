@@ -86,11 +86,7 @@
                     <form action="{{ route('requests.approve', $attendanceRequest->id) }}" method="POST">
                         @csrf
                         @method('PATCH')
-
-                        <div class="button-area">
                             <button type="submit" class="btn-black btn-submit">承認</button>
-                        </div>
-
                     </form>
                 @endif
             </div>

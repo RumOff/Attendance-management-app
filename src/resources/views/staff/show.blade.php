@@ -15,6 +15,13 @@
             <form action="{{ route('requests.storeRequests') }}" method="POST">
             @csrf
 
+                @php
+                    $displayAttendance = $attendanceRequest ?? $attendance;
+
+                    $displayBreaks = $attendanceRequest
+                        ? $attendanceRequest->breakRequests
+                        : $attendance->breaks;
+                @endphp
                 <table class="attendance-table attendance-table__show">
 
                     <tr>
@@ -41,10 +48,10 @@
                             <div class="time-range">
                                 <input class="attendance-input" type="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) ? 'time' : 'text' }}" name="clock_in"
                                     placeholder="" onfocus="this.type='time'" onblur="if(!this.value)this.type='text'"
-                                    value="{{ old('clock_in', optional($attendance->clock_in)->format('H:i')) }}">
+                                    value="{{ old('clock_in', optional($displayAttendance->clock_in)->format('H:i')) }}">
                                 ～
                                 <input class="attendance-input" type="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) ? 'time' : 'text' }}" name="clock_out"
-                                    value="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) }}" onfocus="this.type='time'"
+                                    value="{{ old('clock_out', optional($displayAttendance->clock_out)->format('H:i')) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                             </div>
                             @error('clock_in')<p class="error">{{ $message }}</p>@enderror
@@ -53,18 +60,41 @@
                     </tr>
 
 
-                    @foreach ($attendance->breaks as $index => $break)
+                    @foreach ($displayBreaks as $index => $break)
                         <tr>
                             <th class="attendance-table__show--th">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                             <td class="attendance-table__show--td">
                                 <div class="time-range">
-                                    <input class="attendance-input" type="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) ? 'time' : 'text' }}"
-                                        name="break_start[]" value="{{ old('break_start.' . $index, optional($break->break_start)->format('H:i')) }}"
-                                        onfocus="this.type='time'" onblur="if(!this.value)this.type='text'">
+
+                                    @php
+                                        $breakStart = old('break_start.' . $index,$break->break_start
+                                            ? substr($break->break_start, 0, 5)
+                                            : null
+                                        );
+
+                                        $breakEnd = old('break_end.' . $index,$break->break_end
+                                            ? substr($break->break_end, 0, 5)
+                                            : null
+                                        );
+                                    @endphp
+
+                                    <input 
+                                        class="attendance-input" 
+                                        type="{{ $breakStart ? 'time' : 'text' }}"
+                                        name="break_start[]" 
+                                        value="{{ $breakStart }}"
+                                        onfocus="this.type='time'" 
+                                        onblur="if(!this.value)this.type='text'"
+                                    >
                                     ～
-                                    <input class="attendance-input" type="{{ old('break_end.' . $index, optional($break->break_end)->format('H:i')) ? 'time' : 'text' }}"
-                                        name="break_end[]" value="{{ old('break_end.' . $index, optional($break->break_end)->format('H:i')) }}"
-                                        onfocus="this.type='time'" onblur="if(!this.value)this.type='text'">
+                                    <input 
+                                        class="attendance-input"
+                                        type="{{ $breakEnd ? 'time' : 'text' }}"
+                                        name="break_end[]" 
+                                        value="{{ $breakEnd }}"
+                                        onfocus="this.type='time'" 
+                                        onblur="if(!this.value)this.type='text'"
+                                    >
                                 </div>
 
                                 @error("break_start.$index")<p class="error">{{ $message }}</p>@enderror
@@ -76,11 +106,11 @@
 
                     {{-- 空欄1行 --}}
                     <tr>
-                        <th class="attendance-table__show--th">休憩{{ count($attendance->breaks) + 1 }}</th>
+                        <th class="attendance-table__show--th">休憩{{ count($displayBreaks) + 1 }}</th>
                         <td class="attendance-table__show--td">
                             <div class="time-range">
                                 @php
-                                    $newIndex = count($attendance->breaks);
+                                    $newIndex = count($displayBreaks);
                                 @endphp
 
                                 <input class="attendance-input" type="{{ old('break_start.' . $newIndex) ? 'time' : 'text' }}" name="break_start[]"
@@ -103,7 +133,7 @@
                     <tr>
                         <th class="attendance-table__show--th">備考</th>
                         <td class="attendance-table__show--td">
-                            <textarea name="remarks" id="">{{ old('remarks', $attendance->remarks) }}</textarea>
+                            <textarea name="remarks" id="">{{ old('remarks', $displayAttendance->remarks) }}</textarea>
                             @error('remarks')<p class="error">{{ $message }}</p>@enderror
                             <input type="hidden" name="attendance_id" value="{{ $attendance->id }}">
                         </td>

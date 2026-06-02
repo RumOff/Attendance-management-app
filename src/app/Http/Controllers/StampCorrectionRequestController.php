@@ -78,13 +78,12 @@ class StampCorrectionRequestController extends Controller
         }
 
         //  一般ユーザー
-        $attendanceRequest = AttendanceRequest::where(
-            'attendance_id',
-            $request->attendance_id
-        )
-        ->where('user_id', auth()->id())
-        ->latest()
-        ->first();
+        $attendanceRequest = AttendanceRequest::with('breakRequests')
+            ->where('attendance_id',$request->attendance_id)
+            ->where('user_id', auth()->id())
+            ->where('status', 'pending')
+            ->latest()
+            ->first();
 
         // 申請中は弾く
         if ($attendanceRequest && $attendanceRequest->status === 'pending') {

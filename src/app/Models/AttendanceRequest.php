@@ -22,6 +22,11 @@ class AttendanceRequest extends Model
         'status',
     ];
 
+    protected $casts = [
+        'clock_in' => 'datetime',
+        'clock_out' => 'datetime',
+    ];
+
     public function attendance(){
         return $this->belongsTo(AttendanceRecord::class, 'attendance_id');
     }

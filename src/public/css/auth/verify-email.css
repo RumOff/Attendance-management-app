@@ -1,0 +1,44 @@
+.container {
+    max-width: 500px;
+    margin: 0 auto;
+    text-align: center;
+}
+
+.form__mail {
+
+}
+
+.msg {
+    font-size: 15px;
+    font-weight: bold;
+    margin: 70px auto;
+}
+
+.btn-check {
+    text-decoration: none;
+    background-color: rgb(227, 227, 227);
+    font-size: 14px;
+    font-weight: bold;
+    border: 1px solid;
+    border-radius: 7px;
+    color: black;
+    padding: 10px 25px;
+    margin-bottom: 100px;
+    width: 170px;
+}
+
+.btn-resend {
+    appearance: none;
+    -webkit-appearance: none;
+    -moz-appearance: none;
+    background: none;
+    border: none;
+
+    color: #007bff;
+    padding: 0;
+    margin: 40px 0;
+}
+
+.btn-resend:hover {
+    opacity: 0.7;
+}

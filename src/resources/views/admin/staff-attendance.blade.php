@@ -6,90 +6,111 @@
 
 @section('content')
 
-    <div class="container">
-        <div class="content">
-            <h1 class="page__title">
-                {{ $user->name }}さんの勤怠
-            </h1>
+        <div class="container">
+            <div class="content">
+                <h1 class="page__title">
+                    {{ $user->name }}さんの勤怠
+                </h1>
 
-            {{-- カレンダー --}}
-            <div class="month-nav">
-                <a href="{{ route('admin.staffAttendance', $user->id) }}" class="month-nav__link"><span>←</span> 前月</a>
+                {{-- カレンダー --}}
+                <div class="month-nav">
+                    <a href="{{ route('admin.staffAttendance', [
+                        'id' => $user->id,
+                        'month' => $prevMonth
+                        ]) }}" 
+                        class="month-nav__link">
+                        <span>←</span> 前月
+                    </a>
 
-                <div class="month-nav__display">
-                    <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
-                    <span>{{ $currentMonth->format('Y/m') }}</span>
+                    <div class="month-nav__display">
+                        <img src="{{ asset('images/Schedule icon.png') }}" alt="カレンダー">
+                        <span>{{ $currentMonth->format('Y/m') }}</span>
+                    </div>
+
+                    <a href="{{ route('admin.staffAttendance', [
+                        'id' => $user->id,
+                        'month' => $nextMonth
+                        ]) }}" 
+                        class="month-nav__link">翌月 
+                        <span>→</span>
+                    </a>
                 </div>
 
-                <a href="{{ route('admin.staffAttendance', $user->id) }}" class="month-nav__link">翌月 <span>→</span></a>
-            </div>
-
-            <table class="attendance-table">
-                <thead>
-                    <tr>
-                        <th>日付</th>
-                        <th>出勤</th>
-                        <th>退勤</th>
-                        <th>休憩</th>
-                        <th>合計</th>
-                        <th>詳細</th>
-                    </tr>
-                </thead>
-
-                <tbody>
-                    @foreach ($dates as $date)
-                        @php
-                            $key = $date->format('Y-m-d');
-                            $attendance = $attendances[$key] ?? null;
-                        @endphp
-
+                <table class="attendance-table staff-attendance-table">
+                    <thead>
                         <tr>
-
-                            <td>
-                                {{ $date->Isoformat('MM/DD(ddd)') }}
-                            </td>
-
-                            <td>
-                                @if ($attendance && $attendance->clock_in)
-                                    {{ $attendance->clock_in->format('H:i') ?? null }}
-                                @endif
-                            </td>
-
-                            <td>
-                                @if ($attendance && $attendance->clock_out)
-                                {{ $attendance->clock_out->format('H:i') ?? null }}
-                                @endif
-                            </td>
-
-                            <td>
-                                @if ($attendance && $attendance->break_minutes !== null)
-                                    {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                                @else
-
-                                @endif
-                            </td>
-
-                            <td>
-                                @if ($attendance && $attendance->total_minutes !== null)
-                                    {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
-                                @else
-
-                                @endif
-                            </td>
-
-                            <td>
-                                @if($attendance && $attendance->id !== null)
-                                    <a href="/admin/attendance/{{ $attendance->id }}" class="history__detail">詳細</a>
-                                @else
-                                    <p class="history__detail">詳細</p>
-                                @endif
-                            </td>
-
+                            <th>日付</th>
+                            <th>出勤</th>
+                            <th>退勤</th>
+                            <th>休憩</th>
+                            <th>合計</th>
+                            <th>詳細</th>
                         </tr>
+                    </thead>
 
-                    @endforeach
-                </tbody>
-            </table>
+                    <tbody>
+                        @foreach ($dates as $date)
+                            @php
+                                $key = $date->format('Y-m-d');
+                                $attendance = $attendances[$key] ?? null;
+                            @endphp
+
+                            <tr>
+
+                                <td>
+                                    {{ $date->Isoformat('MM/DD(ddd)') }}
+                                </td>
+
+                                <td>
+                                    @if ($attendance && $attendance->clock_in)
+                                        {{ $attendance->clock_in->format('H:i') ?? null }}
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if ($attendance && $attendance->clock_out)
+                                    {{ $attendance->clock_out->format('H:i') ?? null }}
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if ($attendance && $attendance->break_minutes !== null)
+                                        {{ floor($attendance->break_minutes / 60) }}:{{ str_pad($attendance->break_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                    @else
+
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if ($attendance && $attendance->total_minutes !== null)
+                                        {{ floor($attendance->total_minutes / 60) }}:{{ str_pad($attendance->total_minutes % 60, 2, '0', STR_PAD_LEFT) }}
+                                    @else
+
+                                    @endif
+                                </td>
+
+                                <td>
+                                    @if($attendance && $attendance->id !== null)
+                                        <a href="/admin/attendance/{{ $attendance->id }}" class="history__detail">詳細</a>
+                                    @else
+                                        <p class="history__detail">詳細</p>
+                                    @endif
+                                </td>
+
+                            </tr>
+
+                        @endforeach
+                    </tbody>
+                </table>
+                <div class="csv-area">
+                    <a href="{{ route('admin.staffAttendance.csv', [
+                        'id' => $user->id,
+                        'month' => $currentMonth->format('Y-m')
+                        ]) }}"
+                        class="btn-black btn-csv" >
+                        CSV出力
+                    </a>
+                </div>
+            </div>
         </div>
-    </div>
 @endsection

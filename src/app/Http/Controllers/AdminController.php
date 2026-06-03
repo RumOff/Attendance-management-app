@@ -4,13 +4,12 @@ namespace App\Http\Controllers;
 
 use App\Http\Requests\AdminLoginRequest;
 use App\Models\AttendanceRecord;
-use App\Models\BreakTime;
-use App\Models\AttendanceRequest;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
 {
@@ -78,6 +77,9 @@ class AdminController extends Controller
             ? Carbon::createFromFormat('Y-m', $month)
             : Carbon::now();
 
+        $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
+        $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
+
         // 該当月のはじめと終わりの日にち取得(copy()で$currentMonthを書き換えない)
         $start = $currentMonth->copy()->startOfMonth();
         $end = $currentMonth->copy()->endOfMonth();
@@ -94,6 +96,56 @@ class AdminController extends Controller
         });
         // 日付をキーにした配列に変換 ↑
 
-        return view('admin.staff-attendance', compact('user', 'dates', 'attendances', 'currentMonth'));
+        return view('admin.staff-attendance', compact('user', 'dates', 'attendances', 'currentMonth','prevMonth','nextMonth'));
     }
+
+    public function exportCsv(Request $request, $id)
+    {
+        $user = User::findOrFail($id);
+
+        $month = $request->input('month');
+
+        $currentMonth = $month
+            ? Carbon::createFromFormat('Y-m', $month)
+            : Carbon::now();
+
+        $start = $currentMonth->copy()->startOfMonth();
+        $end = $currentMonth->copy()->endOfMonth();
+
+        $attendances = AttendanceRecord::where('user_id', $id)
+            ->whereBetween('date', [$start, $end])
+            ->with('breaks')
+            ->orderBy('date')
+            ->get();
+
+        $fileName = sprintf(
+            '%s_%s.csv',
+            $user->name,
+            $currentMonth->format('Y-m')
+        );
+
+        return response()->streamDownload(function () use ($attendances) {
+
+            $handle = fopen('php://output', 'w');
+
+            fputcsv($handle, [
+                '日付',
+                '出勤',
+                '退勤',
+            ]);
+
+            foreach ($attendances as $attendance) {
+
+                fputcsv($handle, [
+                    $attendance->date,
+                    optional($attendance->clock_in)->format('H:i'),
+                    optional($attendance->clock_out)->format('H:i'),
+                ]);
+            }
+
+            fclose($handle);
+
+        }, $fileName);
+    }
+
 }

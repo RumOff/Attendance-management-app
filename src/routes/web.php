@@ -45,6 +45,7 @@ Route::middleware(['auth:admin'])->group(function () {
 
     // スタッフ別勤怠一覧
     Route::get('admin/attendance/staff/{id}', [AdminController::class, 'staffAttendance'])->name('admin.staffAttendance');
+    Route::get('admin/attendance/staff/{id}/csv',[AdminController::class, 'exportCsv'])->name('admin.staffAttendance.csv');
 
     // 申請承認一覧
     Route::get('stamp_correction_request/approve/{id}', [StampCorrectionRequestController::class, 'showApprove'])->name('admin.showApprove');

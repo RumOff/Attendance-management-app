@@ -7,7 +7,7 @@
 @section('content')
 
 <div class="container">
-    <div class="form__group">
+    <div class="form__mail">
         <p class="msg">登録していただいたメールアドレスに認証メールを送付しました。 <br>
         メール認証を完了してください。</p>
 
@@ -17,7 +17,7 @@
 
         <form method="POST" action="{{ route('verification.send') }}">
             @csrf
-            <button type="submit" class="btn-resend">認証メールを再送信</button>
+            <button type="submit" class="btn-resend">認証メールを再送する</button>
         </form>
     </div>
 </div>

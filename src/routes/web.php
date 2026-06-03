@@ -16,7 +16,7 @@ Route::post('/admin/logout', [AdminController::class, 'logout']);
 
 
 // ******** 一般ユーザー ********
-Route::middleware(['auth:web'])->group(function (){
+Route::middleware(['auth:web', 'verified'])->group(function (){
 
     //  勤怠登録
     Route::get('/attendance', [StaffController::class, 'index'])->name('staff.index');

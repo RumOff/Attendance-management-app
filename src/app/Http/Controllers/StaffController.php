@@ -17,7 +17,7 @@ class StaffController extends Controller
         $attendance = AttendanceRecord::where('user_id', auth()->id())
         ->where('date', now()->toDateString())
         ->first();
-       
+
         $status = '勤務外';
 
         if ($attendance) {

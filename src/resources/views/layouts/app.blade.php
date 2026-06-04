@@ -18,14 +18,14 @@
 			{{-- ロゴ --}}
 			@if(Auth::guard('admin')->check())
 				<a class="header__logo" href="{{ route('admin.history') }}">
-					<img src="{{ asset('images/COACHTECH_header_logo.png') }}" alt="logo" class="header__img">
-				</a>
 			@elseif(Auth::guard('web')->check())
 				<a class="header__logo" href="{{ route('staff.history') }}">
-					<img src="{{ asset('images/COACHTECH_header_logo.png') }}" alt="logo" class="header__img">
-				</a>
+			@else
+				<a class="header__logo" href="/login">
 			@endif
-
+				<img src="{{ asset('images/COACHTECH_header_logo.png') }}" alt="logo" class="header__img">
+			</a>
+			
 			{{-- ナビ --}}
 			<nav class="header__nav">
 				<ul class="header__list {{ request()->is('login') || request()->is('register') ? 'hidden' : '' }}">

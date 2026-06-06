@@ -31,7 +31,6 @@
     align-items: end;
 }
 
-
 .button-area {
     margin-top: 0;
     display: flex;
@@ -53,4 +52,8 @@
     text-align: center;
     padding: 3px 8px;
     letter-spacing: 2px;
+}
+
+.attendance-table .attendance-table__show--td.attendance-table__show--td-remarks {
+    padding-left: 40px;
 }

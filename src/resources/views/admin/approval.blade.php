@@ -68,7 +68,7 @@
 
                 <tr>
                     <th class="attendance-table__show--th">備考</th>
-                    <td class="attendance-table__show--td">
+                    <td class="attendance-table__show--td attendance-table__show--td-remarks">
                         <p>
                             {{ $attendanceRequest->attendance->remarks }}
                         </p>

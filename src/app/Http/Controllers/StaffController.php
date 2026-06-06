@@ -8,7 +8,6 @@ use App\Models\AttendanceRequest;
 use Illuminate\Http\Request;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
-use Illuminate\Support\Facades\Auth;
 
 class StaffController extends Controller
 {

@@ -22,6 +22,7 @@
                         ? $attendanceRequest->breakRequests
                         : $attendance->breaks;
                 @endphp
+
                 <table class="attendance-table attendance-table__show">
 
                     <tr>
@@ -61,6 +62,7 @@
 
 
                     @foreach ($displayBreaks as $index => $break)
+
                         <tr>
                             <th class="attendance-table__show--th">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                             <td class="attendance-table__show--td">
@@ -68,12 +70,12 @@
 
                                     @php
                                         $breakStart = old('break_start.' . $index,$break->break_start
-                                            ? substr($break->break_start, 0, 5)
+                                            ? $break->break_start->format('H:i')
                                             : null
                                         );
 
                                         $breakEnd = old('break_end.' . $index,$break->break_end
-                                            ? substr($break->break_end, 0, 5)
+                                            ? $break->break_end->format('H:i')
                                             : null
                                         );
                                     @endphp

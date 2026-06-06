@@ -100,7 +100,13 @@
                     </tr>
                 </table>
                 <div class="button-area">
-                    <button type="submit" class="btn-black btn-submit">修正</button>
+                    @if($attendanceRequest && $attendanceRequest->status === 'pending')
+                        <p class="error">
+                            *承認待ちのため修正はできません。
+                        </p>
+                    @else
+                        <button type="submit" class="btn-black btn-submit">修正</button>
+                    @endif
                 </div>
 
             </form>

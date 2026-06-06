@@ -9,6 +9,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
 use Carbon\Carbon;
 use Carbon\CarbonPeriod;
+use App\Models\AttendanceRequest;
 use Symfony\Component\HttpFoundation\StreamedResponse;
 
 class AdminController extends Controller
@@ -58,9 +59,17 @@ class AdminController extends Controller
     }
 
     public function show($id){
-        $attendance = AttendanceRecord::findOrFail($id);
+        $attendance = AttendanceRecord::with('user', 'breaks')
+        ->findOrFail($id);
 
-        return view('admin.show', compact('attendance'));
+        $attendanceRequest = AttendanceRequest::where(
+            'attendance_id',
+            $attendance->id
+        )
+        ->latest()
+        ->first();
+
+        return view('admin.show', compact('attendance', 'attendanceRequest'));
     }
 
     public function staffList(){
@@ -130,16 +139,52 @@ class AdminController extends Controller
 
             fputcsv($handle, [
                 '日付',
-                '出勤',
                 '退勤',
+                '出勤',
+                '休憩',
+                '合計',
             ]);
 
             foreach ($attendances as $attendance) {
+
+                $breakMinutes = $attendance->breaks->sum(function ($break) {
+                    if (!$break->break_start || !$break->break_end) {
+                        return 0;
+                    }
+
+                    return $break->break_end->diffInMinutes(
+                        $break->break_start
+                    );
+                });
+
+                $breakTime = sprintf(
+                    '%02d:%02d',
+                    floor($breakMinutes / 60),
+                    $breakMinutes % 60
+                );
+
+                $workMinutes = 0;
+
+                if ($attendance->clock_in && $attendance->clock_out) {
+
+                    $workMinutes =
+                        $attendance->clock_out->diffInMinutes(
+                            $attendance->clock_in
+                        ) - $breakMinutes;
+                }
+
+                $workTime = sprintf(
+                    '%02d:%02d',
+                    floor($workMinutes / 60),
+                    $workMinutes % 60
+                );
 
                 fputcsv($handle, [
                     $attendance->date,
                     optional($attendance->clock_in)->format('H:i'),
                     optional($attendance->clock_out)->format('H:i'),
+                    $breakTime,
+                    $workTime,
                 ]);
             }
 

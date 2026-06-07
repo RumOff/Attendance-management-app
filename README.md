@@ -1,5 +1,7 @@
 # coachtech勤怠管理アプリ
 
+<br>
+
 ## アプリ概要
 
 勤怠の打刻、勤怠一覧の確認、勤怠修正申請および承認機能を備えた勤怠管理アプリです。<br>
@@ -21,8 +23,6 @@
 - 勤怠詳細表示
 - 勤怠修正申請
 - 修正申請一覧表示
-
-<br>
 
 #### 管理者
 
@@ -53,17 +53,6 @@
 - php artisan migrate
 - php artisan db:seed
 
-### エラー時の対処法
-- 権限エラー(Permission denied)<br>
-    chmod -R 777 storage<br>
-    chmod -R 777 bootstrap/cache<br>
-<br>
-
-- メール送信エラー(Cannot send message without a sender address)<br>
-    ▼.env<br>
-    MAIL_FROM_ADDRESS=test@example.com<br>
-    MAIL_FROM_NAME="Attendance Management App"<br>
-<br>
 
 ## 開発環境(VSCode)
 本プロジェクトは **Dev Containers** を使用して開発しています。<br>

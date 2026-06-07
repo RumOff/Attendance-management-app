@@ -26,7 +26,7 @@ class BreakTime extends Model
         return $this->belongsTo(AttendanceRecord::class, 'attendance_id');
     }
 
-    public function requestBreaks(){
-        return $this->hasMany(RequestBreak::class, 'break_id');
-    }
+    // public function requestBreaks(){
+    //     return $this->hasMany(RequestBreak::class, 'break_id');
+    // }
 }

@@ -11,8 +11,8 @@ use Carbon\CarbonPeriod;
 
 class StaffController extends Controller
 {
-    public function index(){
-
+    public function index()
+    {
         $attendance = AttendanceRecord::where('user_id', auth()->id())
         ->where('date', now()->toDateString())
         ->first();
@@ -37,8 +37,8 @@ class StaffController extends Controller
     }
 
 
-    public function store(Request $request){
-
+    public function store(Request $request)
+    {
         // 今日の勤怠取得
         $attendance = AttendanceRecord::where('user_id', auth()->id())
             ->where('date', now()->toDateString())
@@ -105,7 +105,8 @@ class StaffController extends Controller
 
     }
 
-    public function history(Request $request){
+    public function history(Request $request)
+    {
         $currentMonth = $request->month
             ? Carbon::createFromFormat('Y-m', $request->month)
             : Carbon::now();
@@ -124,17 +125,15 @@ class StaffController extends Controller
             ->keyBy(function ($item) {
                 return Carbon::parse($item->date)->format('Y-m-d');
         });
-        // 日付をキーにした配列に変換 ↑
 
-        // 今月と来月を作る
         $prevMonth = $currentMonth->copy()->subMonth()->format('Y-m');
         $nextMonth = $currentMonth->copy()->addMonth()->format('Y-m');
 
         return view('staff.history', compact('dates', 'attendances', 'currentMonth','prevMonth','nextMonth'));
     }
 
-    public function show($attendance_id){
-
+    public function show($attendance_id)
+    {
         $attendance = AttendanceRecord::where('id', $attendance_id)
             ->with('breaks', 'user')
             ->findOrFail($attendance_id);
@@ -142,6 +141,7 @@ class StaffController extends Controller
         $attendanceRequest = AttendanceRequest::with('breakRequests')
             ->where('attendance_id', $attendance->id)
             ->where('user_id', auth()->id())
+            ->where('status', 'pending')
             ->latest()
             ->first();
 

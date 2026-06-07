@@ -13,12 +13,13 @@ use App\Models\AttendanceRequest;
 
 class AdminController extends Controller
 {
-    public function showLoginForm(){
+    public function showLoginForm()
+    {
         return view('auth.admin-login');
     }
 
-    public function login(AdminLoginRequest $request){
-    
+    public function login(AdminLoginRequest $request)
+    {
         $credentials = $request->only('email', 'password');
 
         if (Auth::guard('admin')->attempt($credentials)) {
@@ -33,14 +34,15 @@ class AdminController extends Controller
         ]);
     }
 
-    public function logout(Request $request){
-    
+    public function logout()
+    {
         Auth::guard('admin')->logout();
 
         return redirect('/admin/login');
     }
 
-    public function history(Request $request){
+    public function history(Request $request)
+    {
         $currentDate = $request->date
             ? Carbon::parse($request->date)
             : Carbon::today();
@@ -57,7 +59,8 @@ class AdminController extends Controller
         return view('admin.history', compact('attendances', 'currentDate','prevDate' ,'nextDate'));
     }
 
-    public function show($id){
+    public function show($id)
+    {
         $attendance = AttendanceRecord::with('user', 'breaks')
         ->findOrFail($id);
 
@@ -71,13 +74,15 @@ class AdminController extends Controller
         return view('admin.show', compact('attendance', 'attendanceRequest'));
     }
 
-    public function staffList(){
+    public function staffList()
+    {
         $staffs = User::get();
 
         return view('admin.staff', compact('staffs'));
     }
 
-    public function staffAttendance(Request $request, $id){
+    public function staffAttendance(Request $request, $id)
+    {
         $user = User::findOrFail($id);
 
         $month = $request->input('month');

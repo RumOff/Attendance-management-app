@@ -12,8 +12,8 @@ use Illuminate\Support\Facades\DB;
 
 class StampCorrectionRequestController extends Controller
 {
-    public function index($status = 'pending'){
-
+    public function index($status = 'pending')
+    {
         // ******** 管理者 ********
         if (Auth::guard('admin')->check()) {
 
@@ -26,9 +26,11 @@ class StampCorrectionRequestController extends Controller
         }
 
         // ******** 一般ユーザー ********
-        $requests = AttendanceRequest::with('attendance')
+        $requests = AttendanceRequest::with([
+            'attendance', 
+            'user',
+            ])
         ->where('user_id', auth()->id())
-        ->with('user')
         ->where('status', $status)
         ->get();
         
@@ -37,8 +39,8 @@ class StampCorrectionRequestController extends Controller
     }
 
 
-    public function storeRequests(AttendanceUpdateRequest $request){
-        
+    public function storeRequests(AttendanceUpdateRequest $request)
+    {
         //  管理者
         if (Auth::guard('admin')->check()) {
 
@@ -109,17 +111,15 @@ class StampCorrectionRequestController extends Controller
             ]);
         }
 
-        $attendance = AttendanceRecord::findOrFail($request->attendance_id);
-
         return redirect()->back();
-
     }
 
-    public function showApprove($id){
-
+    public function showApprove($id)
+    {
         $attendanceRequest = AttendanceRequest::with(
             'user',
-            'attendance.breaks'
+            'attendance.breaks',
+            'breakRequests'
             )->findOrFail($id);
 
         return view('admin.approval', compact(
@@ -128,8 +128,8 @@ class StampCorrectionRequestController extends Controller
 
     }
 
-    public function approve($id){
-
+    public function approve($id)
+    {
         $attendanceRequest = AttendanceRequest::with([
             'attendance',
             'breakRequests',

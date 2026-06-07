@@ -19,7 +19,7 @@
 			@if(Auth::guard('admin')->check())
 				<a class="header__logo" href="{{ route('admin.history') }}">
 			@elseif(Auth::guard('web')->check())
-				<a class="header__logo" href="{{ route('staff.history') }}">
+				<a class="header__logo" href="{{ route('staff.index') }}">
 			@else
 				<a class="header__logo" href="/login">
 			@endif

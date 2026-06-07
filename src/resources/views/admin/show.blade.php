@@ -47,6 +47,8 @@
                                     value="{{ old('clock_out', optional($attendance->clock_out)->format('H:i')) }}" onfocus="this.type='time'"
                                     onblur="if(!this.value)this.type='text'">
                             </div>
+                            @error('clock_in')<p class="error">{{ $message }}</p>@enderror
+                            @error('clock_out')<p class="error">{{ $message }}</p>@enderror
                         </td>
                     </tr>
 

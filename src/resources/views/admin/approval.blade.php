@@ -36,14 +36,14 @@
                     <th class="attendance-table__show--th">出勤・退勤</th>
                     <td class="attendance-table__show--td">
                         <div class="time-range">
-                            <p>{{ optional($attendanceRequest->attendance->clock_in)->format('H:i') }}</p>
+                            <p>{{ optional($attendanceRequest->clock_in)->format('H:i') }}</p>
                                 ～
-                            <p>{{ optional($attendanceRequest->attendance->clock_out)->format('H:i') }}</p>
+                            <p>{{ optional($attendanceRequest->clock_out)->format('H:i') }}</p>
                         </div>
                     </td>
                 </tr>
 
-                @foreach ($attendanceRequest->attendance->breaks as $index => $break)
+                @foreach ($attendanceRequest->breakRequests as $index => $break)
                     <tr>
                         <th class="attendance-table__show--th">{{ $index === 0 ? '休憩' : '休憩' . ($index + 1) }}</th>
                         <td class="attendance-table__show--td">
@@ -70,7 +70,7 @@
                     <th class="attendance-table__show--th">備考</th>
                     <td class="attendance-table__show--td attendance-table__show--td-remarks">
                         <p>
-                            {{ $attendanceRequest->attendance->remarks }}
+                            {{ $attendanceRequest->remarks }}
                         </p>
                     </td>
                 </tr>
